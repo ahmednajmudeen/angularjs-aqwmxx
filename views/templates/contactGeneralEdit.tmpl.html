@@ -1,0 +1,25 @@
+<div class="form-group">
+    <label for="idFirstName">{{::$root.getLocalPhrase('Contact.FirstName')}}</label>
+    <input type="text" class="form-control" ng-model="data.contact.FirstName" id="idFirstName"
+           placeholder="{{::$root.getLocalPhrase('Contact.FirstName.Help')}}" required>
+</div>
+<div class="form-group">
+    <label for="idLastName">{{::$root.getLocalPhrase('Contact.LastName')}}</label>
+    <input type="text" class="form-control" ng-model="data.contact.LastName" id="idLastName"
+           placeholder="{{::$root.getLocalPhrase('Contact.LastName.Help')}}" required>
+</div>
+<div class="form-group">
+    <label for="idTitle">{{::$root.getLocalPhrase('Title')}}</label>
+    <input type="text" class="form-control" ng-model="data.contact.Title" id="idTitle"
+           placeholder="{{::$root.getLocalPhrase('Contact.Title.Help')}}">
+</div>
+<div class="form-group">
+    <label for="idNumber">{{::$root.getLocalPhrase('Contact.Phone')}}</label>
+    <input type="text" class="form-control" ng-model="data.contact.Number" id="idNumber"
+           placeholder="{{::$root.getLocalPhrase('Contact.Phone.Help')}}">
+</div>
+<div class="form-group">
+    <label for="idEmail">{{::$root.getLocalPhrase('Email')}}</label>
+    <input type="email" class="form-control" ng-model="data.contact.Email" id="idEmail"
+           placeholder="{{::$root.getLocalPhrase('Contact.Email.Help')}}">
+</div>

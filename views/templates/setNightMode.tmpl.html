@@ -1,0 +1,19 @@
+<div class="col-xs-7 col-sm-6 col-md-4">
+    <p class="needs-help">
+        <small>{{::$root.getLocalPhrase('Settings.Telephony.NightMode')}}</small>
+    </p>
+</div>
+<div class="col-xs-5 col-sm-6 col-md-8">
+    <div class="btn-group" uib-dropdown is-open="status.isDisplayPrefOpen">
+        <button type="button" class="btn btn-default btn-sm" uib-dropdown-toggle>
+            <i ng-class="{'fa fa-sun-o fa-fw': data.nightMode==1, 'fa fa-moon-o fa-fw': data.nightMode>1}"></i>
+            {{$root.getSelectedNightModeLabel(data.nightMode).label}} <i
+                class="caret"></i>
+        </button>
+        <ul uib-dropdown-menu role="menu">
+            <li ng-repeat="opt in $root.globalVars.NightModeLabels">
+                <a href="" ng-click="data.nightMode=opt.data"><i ng-class="{'fa fa-sun-o fa-fw': $index==0, 'fa fa-moon-o fa-fw': $index !=0}"></i> {{opt.label}}</a>
+            </li>
+        </ul>
+    </div>
+</div>

@@ -1,0 +1,62 @@
+<div ng-controller="VideoCallsCtrl as videoCallsCtrl" class="container-fluid">
+    <div>
+        <div>
+            <video ng-show="videoCallsCtrl.showSelfView" id="localVideo" class="img-rounded"
+                   style="transform: rotateY(-180deg); width:96px" autoplay muted="muted"></video>
+        </div>
+        <div>
+            <div class="btn-group btn-group-xs">
+                <button class="btn btn-default"
+                        ng-class="{'btn-danger': videoCallsCtrl.streamMuteSettings.audio}"
+                        ng-model="service.streamMuteSettings.audio"
+                        ng-click="videoCallsCtrl.toggleAudio()" uib-tooltip="Toggle audio"
+                        tooltip-placement="bottom-right"
+                        uib-btn-checkbox>
+                    <span class="fa fa-microphone"></span>
+                </button>
+                <button class="btn btn-default"
+                        ng-class="{'btn-danger': videoCallsCtrl.streamMuteSettings.video}"
+                        ng-model="service.streamMuteSettings.video"
+                        ng-click="videoCallsCtrl.toggleVideo()" uib-tooltip="Toggle video"
+                        tooltip-placement="bottom-right"
+                        uib-btn-checkbox>
+                    <span class="fas fa-video"></span>
+                </button>
+            </div>
+            <button class="btn btn-default btn-xs" ng-click="videoCallsCtrl.endVideo()"
+                    uib-tooltip="End call" tooltip-placement="bottom-right"><span
+                    class="fa fa-phone fa-idle-phone text-danger"></span></button>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+
+    <div ng-show="videoCallsCtrl.video0InUse">
+        <hr class="video-hr"/>
+        <div style="width: 340px; margin: 0 auto">
+            <video id="remoteVideo0" ng-style="videoCallsCtrl.dimensions" autoplay></video>
+        </div>
+        <div style="margin: 0 auto">
+            <strong><span class="small">{{videoCallsCtrl.displayName0}}</span></strong>
+        </div>
+    </div>
+
+    <div ng-show="videoCallsCtrl.video1InUse">
+        <hr class="video-hr"/>
+        <div style="width: 340px; margin: 0 auto">
+            <video id="remoteVideo1" ng-style="videoCallsCtrl.dimensions" autoplay></video>
+        </div>
+        <div style="margin: 0 auto">
+            <strong><span class="small">{{videoCallsCtrl.displayName1}}</span></strong>
+        </div>
+    </div>
+
+    <div ng-show="videoCallsCtrl.video2InUse">
+        <hr class="video-hr"/>
+        <div style="width: 340px; margin: 0 auto">
+            <video id="remoteVideo2" ng-style="videoCallsCtrl.dimensions" autoplay></video>
+        </div>
+        <div style="margin: 0 auto">
+            <strong><span class="small">{{videoCallsCtrl.displayName2}}</span></strong>
+        </div>
+    </div>
+</div>

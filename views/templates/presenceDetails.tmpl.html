@@ -1,0 +1,59 @@
+<div>
+    <div>
+        <img ng-src="{{::userObj.photo}}" class="img-responsive img-rounded pull-left"/>
+    </div>
+    <div>
+        <span style="padding-left: 5px">{{::userObj.name}}</span> <br/>
+            <span style="padding-left: 5px">{{::userObj.extension}}</span><br/>
+        <small>
+            <div ng-class="getBLFStatusColor(userObj.presence.forwarding.mode)">
+                <span style="padding-left: 5px" ng-class="getBLFStatusClass(userObj.presence.forwarding.mode)"></span>
+                <span ng-class="getBLFStatusColor(userObj.presence.forwarding.mode)" 
+				ng-switch
+                     on="userObj.presence.forwarding.mode">
+                    <span ng-switch-when="DoNotDisturb">{{::getLocalPhrase('Forward.DoNotDisturb')}}</span>
+                    <span ng-switch-when="Dnd">{{::getLocalPhrase('Forward.DoNotDisturb')}}</span>
+                    <span ng-switch-when="Forward">{{::getLocalPhrase('DeviceState.ForwardImmediate')}}</span>
+                    <span ng-switch-when="ForwardImmediate">{{::getLocalPhrase('DeviceState.ForwardImmediate')}}</span>
+                    <span ng-switch-when="ForwardBothRinging">{{::getLocalPhrase('DeviceState.ForwardImmediate')}}</span>
+                    <span ng-switch-when="Busy"> Busy | {{::getLocalPhrase('DeviceState.Busy')}}</span>
+                    <span ng-switch-when="Active" style="color: green;" > {{::getLocalPhrase('DeviceState.Busy')}}</span>
+                    <span ng-switch-when="Offline" style="color: grey;"> Offline | {{::getLocalPhrase('DeviceState.Offline')}}</span>
+                    <span ng-switch-default="" style="color: #448bca;"> Available |{{::getLocalPhrase('DeviceState.Idle')}}</span>
+                </span>
+            </div>
+            <div ng-if="userObj.CurrentCall" class="pull-left" style="padding-left: 5px">
+                <i ng-class="{'fa fa-arrow-right fa-inbound-call': userObj.CurrentCall.IsInbound, 'fa fa-arrow-left fa-outbound-call': !userObj.CurrentCall.IsInbound}" style="font-size: 14px;"></i>
+                <span ng-if="userObj.CurrentCall.displayName"> {{userObj.CurrentCall.displayName}}</span><span
+                ng-if="userObj.CurrentCall.displayCallerID"> {{userObj.CurrentCall.displayCallerID}}</span>
+            </div>
+        </small>
+    </div>
+</div>
+
+
+<div class="clearfix"></div>
+
+
+<div ng-if="::!userObj.cache.isActive">
+    <small><span ng-class="::homeCtrl.getInactivityColor(userObj)">{{::homeCtrl.getInactivityString(userObj)}}</span>
+    </small>
+</div>
+
+<hr style="min-width: 220px; margin-top:0px; margin-bottom: 3px"/>
+
+<small>
+    <strong>{{::getLocalPhrase('Status')}}:</strong> <span ng-class="userObj.cache.presenceColor">
+    <i ng-class="presenceStatusIcon(userObj.presence.status)"></i>
+    {{presenceStatusLabel(userObj.presence.status)}}
+</span>
+    <br/>
+    <div ng-if="userObj.PresenceDetails.Note"><strong>{{::getLocalPhrase('Notes')}}:</strong>
+        {{userObj.PresenceDetails.Note}}<br/></div>
+    <div ng-if="userObj.PresenceDetails.Title"><strong>{{::getLocalPhrase('Presence.Subject')}}:</strong> {{userObj.PresenceDetails.Title}}<br/></div>
+    <div ng-if="userObj.PresenceDetails.Location"><strong>{{::getLocalPhrase('Location')}}:</strong>
+        {{userObj.PresenceDetails.Location}}<br/></div>
+    <div ng-if="userObj.PresenceDetails.ReturnTime"><strong>{{::getLocalPhrase('Presence.ExpectedReturn')}}:</strong> {{userObj.PresenceDetails.ReturnTime | date : 'fullDate'}} {{userObj.PresenceDetails.ReturnTime |
+    date : 'shortTime'}}</div>
+</small>
+<br/>

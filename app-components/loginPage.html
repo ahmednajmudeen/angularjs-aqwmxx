@@ -1,0 +1,130 @@
+
+
+<div style="
+bottom: 0px;left: 0px; right:0px; top:0; position:fixed;
+padding-top: 40px;
+padding-bottom: 40px;
+color: #f9f9f9;
+background-color: #202020;
+color: azure;" ng-cloak="">
+    <div class="login-header-bg" style="position:fixed; height:50px;width:100%;left:0px;top:0px;z-index: 1500;">
+      
+      
+       
+    </div>
+	
+	
+
+	
+  	<div style="position: absolute;bottom: 0;background-color: #1489b7;width: 100%;padding-top: 8px;text-align: center;/*! list-style-type: none; */">
+	
+	<ul class="slide" style="direction: ltr; font-size: 12px; color: rgb(255, 255, 255); font-family: arial;/*! list-style-type: none; */list-style-type: none;">
+        	
+	
+	
+        	<li>ANNOUNCEMENT!!, The system are currently under testing,
+            <li>Therefore, if you face any difficulties or notice that your account information is incorrect,</li>
+            
+            <li>Please notify ICT Support by email : ahmed.najmudeen@kopetro.com.my  or Whatsapp : +601111699759 </li> </div>
+        </ul>
+    <div style="position:fixed; height:50px;width:100%;left:0px;bottom:0px;z-index: 1500;color: #1414a0">
+      
+	  
+
+
+	 
+	 <p class="text-left" style="position: absolute; left:15px; top:0px ">{{::loginCtrl.productVersion}}</p>
+
+    </div>
+    <nav role="navigation" class="navbar navbar-default navbar-inverse navbar-fixed-top" style="height: 50px">
+        <div class="container-fluid">
+
+            <!-- Title -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" ng-init="navCollapsed = true"
+                        ng-click="navCollapsed = !navCollapsed">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">{{::getLocalPhrase( 'Product.Name' )}}</a>
+            </div>
+        </div>
+    </nav>
+    <div class="container-fluid"
+         style="margin-top:15px; margin-bottom: 20px; position:absolute;top:50px;bottom: 50px;left:0; right:0; overflow: auto">
+        <div ng-if="loginCtrl.unsupportedFeatures.length" style="width:100%;margin: 0 auto" class="alert alert-warning">
+            <span class="fa fa-warning"></span><a href=""
+                                                  ng-click="isBrowserWarningsCollapsed = !isBrowserWarningsCollapsed"
+                                                  ng-init="isBrowserWarningsCollapsed = true"><span>{{isBrowserWarningsCollapsed ? 'Show Browser Warnings': 'Hide Browser Warnings'}}</span></a>
+            <div class="badge">{{loginCtrl.unsupportedFeatures.length}}</div>
+            <hr style="margin:0">
+            <div uib-collapse="isBrowserWarningsCollapsed">
+                <ol>
+                    <li ng-repeat="usf in loginCtrl.unsupportedFeatures">{{usf}}</li>
+                </ol>
+            </div>
+        </div>
+        <div ng-style="{'margin-top' : (loginCtrl.unsupportedFeatures.length==0 ? '50px':'5px')}">
+            <div style="padding:10px;max-width: 300px; margin: 0 auto;overflow-y: auto; z-index: 2000; height: 375px">
+                <form role="form" ng-submit="loginCtrl.login()" style="width: 200px; margin-left: 30px;">
+                    <h4 style="text-align: center;" >{{::getLocalPhrase( 'Login.SignInTitle' )}}</h4>
+                    <div uib-alert ng-if="loginCtrl.loginError" class="alert-danger" style="display:none;">{{loginCtrl.loginError}}</div>
+
+
+<div style="/*! text-align: center; *//*! align-content: center; */margin-left: 70px;padding-bottom: 10px;"><a>
+                      <img ng-src="/uc/Images/img2.png?v=0" src="/uc/Images/img2.png?v=0" class="" style="">
+  </a>
+
+
+
+
+</div>
+
+
+
+                    <div class="input-group"  >
+                        <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
+                        <input ng-model="loginCtrl.username" class="form-control" 
+                               placeholder="{{::getLocalPhrase( 'Login.Username' )}}"
+                               ng-disabled="globalVars.loginInProgress || globalVars.autoLoginFailure"
+                               autocomplete="username"
+                               required autofocus/>
+                    </div>
+                    <div class="input-group" ng-disabled="globalVars.loginInProgress || globalVars.autoLoginFailure">
+                        <span class="input-group-addon"><i class="fa fa-key fa-fw"></i></span>
+                        <input type="password" ng-model="loginCtrl.password" class="form-control"
+                               placeholder="{{::getLocalPhrase( 'Login.Password' )}}"
+                               ng-disabled="globalVars.loginInProgress"
+                               autocomplete="current-password"
+                               required/>
+                    </div>
+                    <div style="padding-top: 5px;padding-bottom: 15px">
+                        <a href ng-click="loginCtrl.loginRememberMe = !loginCtrl.loginRememberMe">
+                            <i class="fa fa-lg text-primary"
+                               ng-class="{'fas fa-toggle-on fa-lg': loginCtrl.loginRememberMe, 'fas fa-toggle-off fa-lg': !loginCtrl.loginRememberMe}"></i>
+                            {{::getLocalPhrase( 'Login.RememberMe' )}}
+                        </a>
+                    </div>
+                    <button class="btn btn-primary btn-block text-center"
+                            ng-disabled="globalVars.autoLoginFailure"
+                            ng-class="{active: globalVars.loginInProgress}"
+                            type="submit"><span ng-if="!globalVars.loginInProgress">{{::getLocalPhrase( 'Login.SignIn' )}}</span><i
+                        ng-if="globalVars.loginInProgress" class="fas fa-sync fa-lg fa-spin"></i>
+                    </button>
+                </form>
+            </div>
+            <!--            <div style="width:100%" class="text-center" ng-if="globalVars.ShowHTTPChromeWarning">
+                            <div class="panel panel-warning">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Warning: Chrome Users</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <span>Google announced that support for HTML5 Notifications will cease around August, 2017 in Chrome.</span>
+                                </div>
+                            </div>
+                        </div>-->
+        </div>
+    </div>	
+</div>

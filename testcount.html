@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test submit form</title>
+    <!--<script language="JavaScript" type="text/javascript" src="js/voucher.js"></script>-->
+    <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+    <meta charset="utf-8" />
+</head>
+<body>
+Users online: <span id="usersOnline">0</span>
+Status: <span id="status">down</span>
+<form id="loginForm" name="form" action="#">
+    <div class="form-item">
+        <label>Username:</label>
+        <input type="text" id="username" name="username" />
+    </div>
+    <div class="form-item">
+        <label>Password:</label>
+        <input id="password" name="password" type="text" />
+    </div>
+    <input type="submit" name="submit" value="Submit" onClick='getData()'/>
+</form>
+</body>
+<script>
+    $(document).ready(function () {
+        document.getData = function () {
+            var $params = $('#loginForm :input');
+            var jsonObj = {};
+            $params.each(function () {
+                jsonObj[this.name] = $(this).val();
+            });
+            console.log(jsonObj);
+
+            // perform actual GET request with jsonObj as payload
+            $.get('http://www.google.com/',jsonObj, function(data) {
+                console.log('Received reply: ' + data);
+            }, 'json');
+        };
+        document.numberUsers = 0;
+        setInterval(function() {
+            $.ajax({
+	    	url: "https://uc.kopetro.com.my/ucsuite", 
+	    	type: "GET",
+	    	crossDomain: true,
+	    	data: null,
+	    	dataType: "json",
+	    	success: function(data) {
+			$('#usersOnline').html(data.usersOnline + "");
+			$('#status').html(data.status + "");
+		}
+            });
+        }, 1000);
+    });
+</script>
+</html>

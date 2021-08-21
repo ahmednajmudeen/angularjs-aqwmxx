@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="ucsuite_wc" xmlns="http://www.w3.org/1999/html">
+<head> 
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title>Kopetro Softphone</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link href="libs/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="libs/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet"/>
+    <link href="libs/grid/ui-grid.min.css" rel="stylesheet">
+    <link href="libs/ng-modules.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="/shared-libs/fontawesome-pro-5.11.2/css/all.min.css">
+    <link rel="stylesheet" href="/shared-libs/fontawesome-pro-5.11.2/css/v4-shims.min.css">
+    <link href="app.min.css" rel="stylesheet"/>
+   <link href="offline-theme-dark.css" rel="stylesheet"/>
+ <link href="offline-language-english.css" rel="stylesheet"/>
+
+</head>
+
+<body ng-cloak resize>
+<toaster-container toaster-options="{'position-class': 'toast-bottom-right', 'close-button': true}"></toaster-container>
+<div ui-view="appView"></div>
+<script src="libs/api.js"></script>
+<script src="libs/misc.min.js"></script>
+
+<script>
+    var DebugInfoEnabled = false;
+
+    try {
+        console.log("webrtcDetectedBrowser", window.webrtcDetectedBrowser);
+//        console.log("**** Debugging WebRTC Plugin");
+//        AdapterJS.WebRTCPlugin.setLogLevel("VERBOSE");
+//        console.log("AdapterJS.WebRTCPlugin.setLogLevel complete");
+        var ua = navigator.userAgent.toLowerCase();
+        if ((ua.indexOf('msie') >= 0) || (navigator.appVersion.toLowerCase().indexOf('trident/') >= 0)) {
+            console.log("index.html: Internet Explorer");
+            AdapterJS.options.hidePluginInstallPrompt = true
+        }
+        if (ua.indexOf('mozilla/5.0') > -1 && ua.indexOf('android') > -1 && ua.indexOf('applewebkit') > -1 && ua.indexOf('chrome') == -1) {
+            console.log("index.html: Device is UT880");
+            AdapterJS.options.hidePluginInstallPrompt = true
+        }
+        else if (ua.indexOf('ipad') >= 0) {
+            console.log("index.html: Device is iPad");
+            AdapterJS.options.hidePluginInstallPrompt = true
+        }
+        else if (ua.indexOf('iphone') >= 0) {
+            console.log("index.html: Device is iPhone");
+            AdapterJS.options.hidePluginInstallPrompt = true
+        }
+    }
+    catch (err) {
+        console.error("WebRTC Plugin setup", err);
+    }
+
+</script>
+
+<script src="offline.min.js"></script>
+<script src="libs/angular/angular.min.js"></script>
+<script src="launchers.min.js"></script>
+<script src="app.min.js"></script>
+<script src="libs/grid/ui-grid.min.js"></script>
+<script src="libs/ng-modules.min.js"></script>
+<script src="libs/angular-ui.min.js"></script>
+
+
+<script type='text/javascript'>
+    $(document).ready(function () {
+
+    });
+
+</script>
+
+</body>
+</html>

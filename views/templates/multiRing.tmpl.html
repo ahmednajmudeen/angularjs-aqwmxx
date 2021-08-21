@@ -1,0 +1,62 @@
+<div ng-if="data.multiDevRingingViewState!=='OFF'">
+    <hr/>
+    <h5>{{::getLocalPhrase('MultiRing.Title')}}</h5>
+    <h5>
+        <small><p>{{::getLocalPhrase('MultiRing.Title.Help', data.user.extension)}}</p></small>
+    </h5>
+    <div ng-switch="data.multiDevRingingViewState">
+        <div ng-switch-when="ON">
+                <span class="pull-left"
+                      style="font-size:80%">{{::getLocalPhrase('MultiRing.AdditionalPhones')}}: </span>
+        <span ng-if="getSetupMultiRingDevices().length" class="pull-left">
+            <button class="btn btn-info btn-sm" ng-click="enableAllMultiRing()">
+                {{::getLocalPhrase('Button.EnableAll')}}
+            </button>
+            <button class="btn btn-info btn-sm" ng-click="disableAllMultiRing()">
+                {{::getLocalPhrase('Button.DisableAll')}}
+            </button>
+        </span>
+            <br/><br/>
+
+            <div class="row" style="margin-left: 2em">
+                <div ng-repeat="snrObj in getSetupMultiRingDevices()">
+                    <div class="col-xs-4 col-sm-3 col-md-2"
+                         style="border-width: 2px; border-style: solid; border-radius: 5px; border-color: #777; min-height: 80px;
+                 margin-left:3px; padding: 2px" ng-class="{'text-muted': !snrObj.IsEnabled}"
+                         ng-style="{'font-style': (snrObj.IsEnabled ? null : 'italic')}">
+                        <div class="text-center">
+                            <div ng-if="snrObj.IsMobile">
+                                <span style="font-size: 200%" class="glyphicon glyphicon-phone"></span><br/>
+                                {{::getLocalPhrase('MultiRing.ExtPhone')}}<br/>
+                                <span ng-if="snrObj.SpeedDial && snrObj.SpeedDial.Destination">{{snrObj.SpeedDial.Destination}}</span>
+                            </div>
+                            <div ng-if="!snrObj.IsMobile">
+                                <span style="font-size: 200%" class="glyphicon glyphicon-phone-alt"></span><br/>
+                                {{::getLocalPhrase('MultiRing.IntPhone')}}<br/>
+                                x{{snrObj.DN}}<br/>
+                            </div>
+                        </div>
+                        <a ng-ref="" style="position:absolute; right: 2px; bottom:2px"
+                           ng-click="editMultiRing(snrObj)"><i
+                                class="fa fa-pencil"></i> </a>
+                        <a ng-ref="" style="position:absolute; right: 2px; top:2px"
+                           ng-click="deleteMultiRing(snrObj)"><i
+                                class="fa fa-times text-danger"></i> </a>
+                    </div>
+                </div>
+                <div ng-if="availableMultiRingDevices()" class="col-xs-4 col-sm-3 col-md-2 text-center"
+                     style="margin-left: 3px;  margin-top: 20px; min-height: 80px;">
+                    <a class="pull-left text-info" ng-ref=""
+                       ng-click="editMultiRing()"><i class="fa fa-plus-square-o fa-2x"></i><br/>{{::getLocalPhrase('MultiRing.Add')}}</a>
+                </div>
+            </div>
+        </div>
+        <div ng-switch-when="READING">
+            <p class="text-primary">{{::getLocalPhrase('MultiRing.READING')}} <i class="fa fa-refresh fa-spin"></i>
+            </p>
+        </div>
+        <div ng-switch-when="ERROR">
+            <p class="text-warning">{{::getLocalPhrase('MultiRing.READ_ERROR')}}</p>
+        </div>
+    </div>
+</div>

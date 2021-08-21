@@ -1,0 +1,4 @@
+<h5>{{::getLocalPhrase('ContactCounts.title', [contactsNewCtrl.numContacts])}}</h5>
+<div ng-repeat="(contactType, count) in contactsNewCtrl.contactCounts">
+    {{::getLocalPhrase('ContactType.' + contactType)}}: {{count}}
+</div>

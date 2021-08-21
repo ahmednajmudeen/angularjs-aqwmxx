@@ -1,0 +1,97 @@
+<div class="pull-left" uib-dropdown on-toggle="toggledDeviceStatus(open, userObj)">
+    <a href class="pull-left" uib-dropdown-toggle>
+        <i ng-class="userObj.cache.blfStatusIndicator"></i>
+    </a>
+    <ul uib-dropdown-menu role="menu"
+        ng-class="::{'dropdown-menu-right': $root.globalVars.Settings.AdvancedHomePage}">
+        <li>
+            <a href ng-click="callNumber(userObj, 'Internal', userObj.extension)">
+                {{::userObj.extension }}
+            </a>
+        </li>
+        <li class="divider" ng-if="::!globalVars.IsSLTPhone && !globalVars.Settings.Is4xxDevice"></li>
+        <li ng-if="::!globalVars.IsSLTPhone && !globalVars.Settings.Is4xxDevice">
+            <a href ng-click="callVoicemail(userObj)">{{::getLocalPhrase('Voicemail')}} <span
+                class="fa fa-caret-square-o-right"></span> </a>
+        </li>
+        <li class="divider"></li>
+        <li ng-repeat="altNumber in userObj.AlternateNumbers">
+            <a href
+               ng-click="callNumber(userObj, 'Internal', altNumber.Number, altNumber.AltType)">
+                {{ altNumber.Number }} ({{showAltNumType(altNumber.AltType) }})
+            </a>
+        </li>
+    </ul>
+</div>
+<div class="pull-left" ng-switch="::(globalVars.Settings.EnableEmailSend && userObj.Email.length>0)"
+     style="margin-left: 1em;"> <!-- email indicator -->
+    <div ng-switch-when="true">
+        <a href="mailto:{{userObj.Email}}" target="_top"><i class="fa fa-envelope fa-fw"  style="font-size: 13px;margin-top: 6px"  ></i></a><span  style="font-size: 11px"> EMAIL</span>
+    </div>
+    <div ng-switch-when="false">
+        <i class="fa fa-fw"></i>
+    </div>
+</div>
+<div class="pull-left" style="margin-left: 1em;" ng-switch="globalVars.SmsNumbers.length>0"> <!-- chat indicator -->
+    <div ng-switch-when="true">
+        <!-- logged in user has SMS DID numbers -->
+        <div ng-if="!userObj.numMobileNumbers">
+            <!-- targer user has no mobile numbers -->
+            <i ng-if="!userObj.cache.showChat" class="fa fa-fw"></i>
+
+            <a ng-if="userObj.cache.showChat" href=""
+               ui-sref="app.newChat({chatParm: userObj.extension})">
+                <span class="fa fa-comment fa-fw"></span>
+                <span class="badge" ng-class="{'animated bounce alerting': globalVars.newChatAlert}"
+                      ng-if="userObj.cache.numUnreadChats">{{userObj.cache.numUnreadChats}}</span>
+            </a>
+        </div>
+
+        <div ng-if="userObj.numMobileNumbers" uib-dropdown>
+            <!-- targer user has mobile numbers -->
+            <a href class="pull-left" uib-dropdown-toggle>
+                <span class="fa fa-comment fa-fw"></span>
+                <span class="badge" ng-class="{'animated bounce alerting': globalVars.newChatAlert}"
+                      ng-if="userObj.cache.numUnreadChats">{{userObj.cache.numUnreadChats}}</span>
+            </a>
+            <ul uib-dropdown-menu role="menu"
+                ng-class="::{'dropdown-menu-right': $root.globalVars.Settings.AdvancedHomePage}">
+                <li ng-if="userObj.cache.showChat">
+                    <a href ui-sref="app.newChat({chatParm: userObj.extension})">
+                        {{::userObj.extension }}
+                    </a>
+                </li>
+                <li ng-if="userObj.cache.showChat" class="divider"></li>
+                <li ng-repeat="altNumber in userObj.AlternateNumbers">
+                    <a ng-if="altNumber.AltType==='Mobile'" href
+                       ng-click="goToSMSChat(altNumber.Number)">
+                        {{ altNumber.Number }} ({{showAltNumType(altNumber.AltType) }}) <span class="fa fa-sms"></span>
+                    </a>
+                </li>
+            </ul>
+
+        </div>
+
+    </div>
+    <div ng-switch-when="false">
+        <!-- logged in user has no SMS DID numbers -->
+        <i ng-if="!userObj.cache.showChat" class="fa fa-fw"></i>
+
+        <a ng-if="userObj.cache.showChat" href ui-sref="app.newChat({chatParm: userObj.extension})">
+            <span class="fa fa-comment fa-fw" style="font-size: 13px;margin-top: 6px"> </span><span style="font-size: 11px"> CHAT</span>
+            <span class="badge" ng-class="{'animated bounce alerting': globalVars.newChatAlert}"
+                  ng-if="userObj.cache.numUnreadChats">{{userObj.cache.numUnreadChats}}</span>
+        </a>
+    </div>
+</div>
+<div ng-if="userObj.cache.canVideo" class="pull-left" style="margin-left: 2em;" uib-dropdown
+     on-toggle="doVideo(open, userObj.extension)">
+    <a href class="pull-left" uib-dropdown-toggle>
+        <i class="fas fa-video fa-fw" ng-class="{'call-connected':userObj.cache.usingVideo}" style="font-size: 13px;margin-top: 6px" ></i>
+    </a>
+    <ul uib-dropdown-menu role="menu">
+        <li>
+            <a href ng-click="startVideo(userObj.extension)">Add Video Party</a>
+        </li>
+    </ul>
+</div>

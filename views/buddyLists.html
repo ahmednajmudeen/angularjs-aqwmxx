@@ -1,0 +1,76 @@
+<a ng-if="::!globalVars.IsUT880" href ng-click="back()" class="text-primary"><i class="fa fa-chevron-left"></i>
+    {{::getLocalPhrase('Button.Back')}}</a>
+
+<div class="row" style="margin-top:0.5em">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading">{{::getLocalPhrase('Menu.BuddyLists')}}
+                <a href=""
+                   uib-popover-template="'views/templates/buddyListsHelp.tmpl.html'"
+                   popover-title=""
+                   popover-placement="right"
+                   popover-trigger="'mouseenter focus'"
+                   popover-append-to-body="false">
+                    <i class="fa fa-question-circle text-info"></i>
+                </a>
+
+            </div>
+
+            <div class="table-responsive table-bordered">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th style="width: 15%">{{::getLocalPhrase('Column.Favorite/Current')}}</th>
+                        <th style="width: 40%">{{::getLocalPhrase('Column.Name')}}</th>
+                        <th style="width: 20%"></th>
+                        <th style="width: 25%"></th>
+                    </tr>
+                    </thead>
+                    <tr ng-repeat="buddyListObj in buddyLists | filter : {readOnly: '!true'}"
+                        ng-controller="buddyListItemCtrl">
+                        <td>
+                            <span class="pointer"
+                                  ng-click="toggleSelection();goToBuddyList('{{ buddyListObj.ID }}');"
+                                  ng-class="{'fa fa-heart-o': !buddyListObj.default, 'fa fa-heart text-danger': buddyListObj.default}"></span>
+                            <span ng-if="buddyListObj.current" class="fa fa-check text-info"></span>
+                        </td>
+                        <td>
+                            <a ng-click="goToBuddyList(buddyListObj.ID, true)" href="">{{buddyListObj.name}}</a>
+                        </td>
+                        <td>
+                            <span uib-tooltip="{{getLocalPhrase('NumExtensions', buddyListObj.list.length)}}"
+                                  tooltip-placement="left"><i
+                                    class="fa fa-users"></i>{{ buddyListObj.list.length }}</span> <span
+                                ng-if="buddyListObj.didList && buddyListObj.didList.length>0"
+                                uib-tooltip="{{getLocalPhrase('NumDIDs', buddyListObj.didList.length)}}"
+                                tooltip-placement="right"><i style="margin-left:1em" class="fa fa-list-ul"></i>{{ buddyListObj.didList.length }}</span>
+                        </td>
+                        <td>
+                            <a ng-if="buddyListObj.canEdit" href='' ng-click="editBuddyList(buddyListObj.ID)"><span
+                                class="fa fa-pencil text-info"></span></a>
+                            <i ng-if="!buddyListObj.canEdit" class="fa fa-fw"></i>
+                            <a ng-if="buddyListObj.canEdit" href='' ng-click="deleteBuddyList(buddyListObj)"
+                               style="padding-left: 1em"><span
+                                    class="fa fa-trash-o text-danger "></span></a>
+                            <i ng-if="!buddyListObj.canEdit" class="fa fa-fw"></i>
+                            <a ng-if="buddyListObj.canChat" href="" ng-click="startBuddyListChat(buddyListObj)"
+                               style="padding-left: 1em"
+                               tooltip-placement="left-top"
+                               uib-tooltip="{{::getLocalPhrase('StartBlfGroupChat', [buddyListObj.name])}}">
+                                <span class="fa fa-comments text-primary"></span>
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <hr/>
+            <button ng-if="::globalVars.IsAttendant || globalVars.IsAdvancedUser" type="button"
+                    ng-click="addBuddyList()" class="btn btn-primary"
+                    style="margin:5px">{{::getLocalPhrase('AddBuddyList')}}
+            </button>
+        </div>
+    </div>
+</div>
+
+

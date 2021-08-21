@@ -1,0 +1,31 @@
+<!--<h5>{{::getLocalPhrase('Label.Contacts')}}</h5>-->
+
+<div class="container-fluid">
+
+    <div uib-alert ng-repeat="error in contactsNewCtrl.errors" class="alert-danger" ng-if="contactsNewCtrl.errors"
+         close="contactsNewCtrl.errorTextClosed($index)">{{error}}
+    </div>
+
+    <button ng-if="::contactsNewCtrl.canEditContacts" type="button" class="btn btn-default"
+            ng-click="contactsNewCtrl.addContact()">
+        <span class="fa fa-user-plus"></span> {{::getLocalPhrase('Button.AddContact')}}
+    </button>
+    <button type="button"
+            ng-csv="contactsNewCtrl.getExportArray()"
+            csv-header="contactsNewCtrl.getExportColumns()"
+            filename="contacts.csv" field-separator="," lazy-load="true"
+            class="btn btn-default">
+        <span class="fas fa-file-excel"></span> {{::getLocalPhrase('Button.Export')}}
+    </button>
+
+    <i class="fas fa-question-circle text-primary pull-right" style="font-size:2em"
+       uib-popover-template="'views/templates/contactCounts.tmpl.html'"
+       popover-title=""
+       popover-placement="left" popover-trigger="'focus mouseenter'" popover-append-to-body="false">
+    </i>
+
+    <div scroll-glue>
+        <ng-include src="'views/templates/contactsNew.tmpl.html'"></ng-include>
+    </div>
+
+</div>

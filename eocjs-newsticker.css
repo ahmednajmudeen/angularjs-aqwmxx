@@ -1,0 +1,66 @@
+/* eocjsNewsticker v0.4.2 */
+#footer-news-login {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 30px;
+    background: #4e8bffb5;
+	color: white;
+}
+
+#footer-news-home{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 30px;
+    background: #4e8bffb5;
+	color: white;
+}
+
+
+#footer-news-mobile{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 30px;
+    background: #4e8bffb5;
+	color: white;
+}
+.eocjs-newsticker {
+  padding: 7px 0 5px 0;
+  background-color: #eee;
+}
+
+.eocjs-newsticker .eocjs-newsticker-container {
+  position: relative;
+  height: 18px;
+  overflow: hidden;
+}
+
+.eocjs-newsticker .eocjs-newsticker-one,
+.eocjs-newsticker .eocjs-newsticker-two {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 18px;
+  line-height: 14px;
+  white-space: nowrap;
+}
+
+.eocjs-newsticker-loader {
+  position: absolute;
+  left: calc(50% - 10px);
+  width: 16px;
+  height: 16px;
+  display: block;
+  border: 2px solid #555555;
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  animation: eocjs-newsticker-spin .75s linear infinite;
+}
+
+@keyframes eocjs-newsticker-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

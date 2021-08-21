@@ -1,0 +1,5 @@
+<small>
+    <strong>{{::$root.getLocalPhrase('Presence.Subject')}}:</strong> {{data.subject}},
+    <strong>{{::$root.getLocalPhrase('Location')}}:</strong> {{data.location}},
+    <strong>{{::$root.getLocalPhrase('Presence.ExpectedReturn')}}:</strong> {{data.expectedReturn | date : 'fullDate'}} {{data.expectedReturn | date : 'shortTime'}}
+</small>

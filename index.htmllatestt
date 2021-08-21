@@ -19,18 +19,13 @@
 	<link href="offline-theme-dark.css" rel="stylesheet" />
 	<link href="offline-language-english.css" rel="stylesheet" />
 	<link href="offline-theme-dark.css" rel="stylesheet" />
-<link rel="stylesheet" href="//cdn.materialdesignicons.com/5.4.55/css/materialdesignicons.min.css">
-
-
+<link href="jquery-fab-button.css" rel="stylesheet" />
+		
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet">
 	<style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap');
 </style>
-
-
-
-
 <style>
 
 
@@ -48,19 +43,17 @@ background: #FF0000;
 }
 
 </style>
-
-
- 
 	
 </head>
 
-<body ng-cloak resize style="background-color: #242529;">
+<body ng-cloak resize style="background-image: url(https://acctcdn.msauth.net/images/2_vD0yppaJX3jBnfbHF1hqXQ2.svg);">
 	<toaster-container toaster-options="{'position-class': 'toast-bottom-right', 'close-button': true}"></toaster-container>
 	<div ui-view="appView"></div>
 <script src="https://apis.google.com/js/api.js"></script>
 
 
-
+<script src="libs/misc.min.js"></script>
+<script src="jquery-fab-button.js"></script>
 	<script>
 	var DebugInfoEnabled = false;
 	try {
@@ -88,20 +81,35 @@ background: #FF0000;
 	
 
 	
+	
+	<script src="offline.min.js"></script>
+	<script src="libs/angular/angular.min.js"></script>
+	<script src="launchers.min.js"></script>
+	<script src="app.min.js"></script>
+	<script src="libs/grid/ui-grid.min.js"></script>
+	<script src="libs/ng-modules.min.js"></script>
+	<script src="libs/angular-ui.min.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
 	
 	
 	
 	
+	<script type='text/javascript'>
 	
 	
-<script type='text/javascript'>
+	
 	
 	$(document).ready(function() {
+
+	
 	
 	});
 
-</script>
+
+	
+	</script>
 	
 <script>
         $(function(){
@@ -125,30 +133,8 @@ background: #FF0000;
         });
     </script>
 	
-
-
 	
-	
-	
-	
-</body><script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<script src="libs/misc.min.js"></script>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.css" />
-  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-tour/0.10.1/css/bootstrap-tour.min.css">
- <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-tour/0.10.1/js/bootstrap-tour.js"></script>
-	<script src="offline.min.js"></script>
-	<script src="libs/angular/angular.min.js"></script>
-	<script src="launchers.min.js"></script>
-	<script src="app.min.js"></script>
-	<script src="libs/grid/ui-grid.min.js"></script>
-	<script src="libs/ng-modules.min.js"></script>
-	<script src="libs/angular-ui.min.js"></script>
-
-
-
-
+</body>
 
 </html>
 

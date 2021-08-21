@@ -1,0 +1,18 @@
+<div class="home-container" 
+     ng-class="::{'home-container-multi-col': (globalVars.Settings.HomePageDisplaySetting==='MULTI_COLUMN'),
+            'home-container-one-col': (globalVars.Settings.HomePageDisplaySetting==='ONE_COLUMN')}" refresh-on="refreshHomePage"   >
+    <div ng-repeat="userObj in homeCtrl.blfUsersArray track by userObj.extension"
+         class="blf-well home-item"
+         ng-class="{'home-item-multi-col': (globalVars.Settings.HomePageDisplaySetting==='MULTI_COLUMN'),
+                'home-item-one-col': (globalVars.Settings.HomePageDisplaySetting==='ONE_COLUMN'),
+                'blf-well-signedOut' : !userObj.cache.isLoggedIn, 'blf-well-inactive' : userObj.cache.isInactive}"
+    >
+        <rp-blf-panel></rp-blf-panel>
+    </div>
+</div>
+<div ng-if="homeCtrl.enableBuddyListChat" class="home-buddy-list-button animated lightSpeedIn"
+     tooltip-placement="left-top" uib-tooltip="{{getLocalPhrase('StartBlfGroupChat', [homeCtrl.buddyListName])}}">
+    <a ng-href="" ng-click="homeCtrl.startBuddyListChat()" style="color: #ffffff">
+         <i class="material-icons" style="">chat</i>
+    </a>
+</div>

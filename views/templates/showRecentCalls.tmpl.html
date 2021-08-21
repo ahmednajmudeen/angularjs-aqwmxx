@@ -1,0 +1,74 @@
+<div class="container-fluid">
+
+    <div ng-if="agentCallDispCtrl.currentRecentCall"
+         class="panel"
+         ng-class="{'panel-success': agentCallDispCtrl.currentRecentCall.dispCode,
+            'panel-warning': !agentCallDispCtrl.currentRecentCall.dispCode && agentCallDispCtrl.currentRecentCall.tallyCodes.IsOptional,
+            'panel-danger': !agentCallDispCtrl.currentRecentCall.dispCode && !agentCallDispCtrl.currentRecentCall.tallyCodes.IsOptional,
+            }"
+    >
+
+        <div class="panel-heading">
+            <span>
+                {{agentCallDispCtrl.currentRecentCall.index}} / {{agentCallDispCtrl.numRecentCalls}}
+            </span>
+            <span style="margin-left:1em">
+                <a ng-href="" ng-click="agentCallDispCtrl.showPreviousCall()">
+                    <i ng-class="{'fas fa-angle-left fa-fw text-primary' : agentCallDispCtrl.showBefore, 'fa fa-fw' : !agentCallDispCtrl.showBefore}"></i></small>
+                </a>
+                <a ng-href="" ng-click="agentCallDispCtrl.showNextCall()">
+                    <i ng-class="{'fas fa-angle-right fa-fw text-primary' : agentCallDispCtrl.showAfter, 'fa fa-fw' : !agentCallDispCtrl.showAfter}"></i></small>
+                </a>
+            </span>
+
+            <span>{{::getLocalPhrase('CallDispTitle')}}</span>
+
+            <span class="pull-right">
+                <a ng-if="agentCallDispCtrl.currentRecentCall.canDelete"
+                   ng-href=""
+                   ng-click="agentCallDispCtrl.deleteCurrentCall()" style="margin-right:2em">
+                        <i class="fas fa-times text-danger"></i>
+                </a>
+            </span>
+        </div>
+
+        <div class="panel-body">
+
+            <div class="row">
+                <div class="col-xs-6">
+                    {{::getLocalPhrase('CallStartTime')}}: {{agentCallDispCtrl.currentRecentCall.arrivalTime}}
+                </div>
+                <div class="col-xs-6">
+                    {{::getLocalPhrase('WaitTime')}}: {{agentCallDispCtrl.currentRecentCall.WaitTime}}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-6">
+                    {{::getLocalPhrase('Number')}}: {{agentCallDispCtrl.currentRecentCall.CallerID}}
+                </div>
+                <div class="col-xs-6">
+                    {{::getLocalPhrase('Queue')}}: {{agentCallDispCtrl.currentRecentCall.QueueName}}
+                </div>
+            </div>
+
+        </div>
+
+        <div class="panel-footer">
+            <span ng-if="!agentCallDispCtrl.currentRecentCall.dispCode" ng-class="{
+                'fas fa-exclamation-square text-danger': !agentCallDispCtrl.currentRecentCall.tallyCodes.IsOptional,
+                'far fa-exclamation-triangle text-warning': agentCallDispCtrl.currentRecentCall.tallyCodes.IsOptional
+            }"></span>
+            {{::getLocalPhrase('SetDispCode')}}:
+            <a href="#" editable-select="agentCallDispCtrl.currentRecentCall.dispCode"
+               e-ng-options="s.ID as s.Code for s in agentCallDispCtrl.currentRecentCall.tallyCodes.Codes"
+               onaftersave="agentCallDispCtrl.updateDispositionCode($data)"
+               e-style="width: 100%">
+                {{ agentCallDispCtrl.showDispositionCode() }}
+            </a>
+
+        </div>
+
+    </div>
+
+</div>

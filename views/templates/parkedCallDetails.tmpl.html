@@ -1,0 +1,13 @@
+<div>
+    <div ng-if="::parkObj.IsOccupied">
+        Call parked by <span ng-if="::parkObj.ParkerName"> {{::parkObj.ParkerName}}</span><span ng-if="::parkObj.Parker"> ({{::parkObj.Parker}})</span><br/>
+        Park time: {{computeDuration(parkObj) | displayDuration}}<br/><br/>
+        Caller:
+        <i ng-class="{'fa fa-sign-in fa-flip-horizontal': parkObj.IsInbound, 'fa fa-sign-out': !parkObj.IsInbound}"></i>
+        <span ng-if="::parkObj.CallerName"> {{::parkObj.CallerName}}</span><span ng-if="::parkObj.CallerID">: {{::parkObj.CallerID}}</span>
+    </div>
+
+    <div ng-if="::!parkObj.IsOccupied">
+        Park orbit is available
+    </div>
+</div>

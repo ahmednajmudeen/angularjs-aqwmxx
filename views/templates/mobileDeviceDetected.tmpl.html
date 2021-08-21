@@ -1,0 +1,23 @@
+<div>
+    <div class="radio">
+        <label>
+            <input type="radio" ng-model="data.cpMode" value="USE_APP_CP"/>
+            <span class="glyphicon glyphicon-phone-alt"></span>
+            <small>{{::$root.getLocalPhrase('Settings.CallFeatures.USE_APP_CP', [data.extension])}}</small>
+        </label>
+    </div>
+    <div class="radio">
+        <label>
+            <input type="radio" ng-model="data.cpMode" value="USE_MOBILE_CP"/>
+            <span class="fa fa-mobile-phone fa-2x"> </span>
+            <small>{{::$root.getLocalPhrase('Settings.CallFeatures.USE_MOBILE_CP', [data.extension])}}</small>
+        </label>
+    </div>
+    <div class="radio">
+        <label>
+            <input type="radio" ng-model="data.cpMode" value="NO_CP"/>
+            <span class="fa fa-ban"> </span>
+            <small>{{::$root.getLocalPhrase('Settings.CallFeatures.NO_CP', [data.extension])}}</small>
+        </label>
+    </div>
+</div>

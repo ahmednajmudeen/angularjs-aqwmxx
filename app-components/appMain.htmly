@@ -1,0 +1,605 @@
+<nav id="header" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+
+    <div class="navbar-header" >
+
+        <button type="button" class="navbar-toggle" ng-init="navCollapsed = true"
+                ng-click="navCollapsed = !navCollapsed" style="-webkit-app-region: no drag">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="" ui-sref=".home" style="-webkit-app-region: drag" >KOPETRO SoftPhone</a>
+    </div>
+
+
+    <div class="collapse navbar-collapse" uib-collapse="navCollapsed" style="-webkit-app-region: no drag">
+
+        <ul class="nav navbar-nav">
+            <li class="hidden-xs" ng-if="appMainCtrl.getBuddyLists().length>1" uib-dropdown ui-sref=".home"
+                ui-sref-active="active">
+                <a ng-href uib-dropdown-toggle>{{::getLocalPhrase('Label.Home')}} <b class="caret"></b></a>
+                <ul uib-dropdown-menu role="menu">
+                    <li ng-repeat="buddyListObj in appMainCtrl.getBuddyLists()">
+                        <a ng-click="appMainCtrl.goToBuddyListName( buddyListObj.ID )" href="">{{ buddyListObj.name }}
+                            <span ng-if="buddyListObj.default" class="fa fa-heart text-danger"></span>
+                            <span ng-if="buddyListObj.current" class="fa fa-check text-info"></span>
+                            <i class="fas fa-comment text-primary" style="padding-left: 1em"
+                               ng-if="buddyListObj.canChat"></i>
+                        </a>
+                    </li>
+                    <li class="divider"></li>
+                    <li><a href="" ng-click="appMainCtrl.editBuddyListClicked(); $event.stopPropagation();">{{::appMainCtrl.getBuddyListMenuLabel()}}</a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="hidden-xs" ng-if="appMainCtrl.getBuddyLists().length<=1" ui-sref=".home" ui-sref-active="active">
+                <a>{{::getLocalPhrase('Label.Home')}}</a>
+            </li>
+
+            <li class="hidden-xs" ui-sref=".contactsNew" ui-sref-active="active">
+                <a>{{::getLocalPhrase('Label.Contacts')}}</a>
+            </li>
+
+
+            <li class="hidden-xs" ui-sref=".callHistory" ui-sref-active="active">
+                <a>{{::getLocalPhrase('Label.CallHistory')}}
+                    <div class="badge" ng-class="{'animated bounce alerting': globalVars.MissedCalls}"
+                         ng-if="globalVars.MissedCalls">{{globalVars.MissedCalls}}
+                    </div>
+                </a>
+            </li>
+            <li class="hidden-xs" ng-if="::globalVars.CanChat" ui-sref=".newChat" ui-sref-active="active">
+                <a>{{::getLocalPhrase('Chats')}}
+                    <div class="badge" ng-class="{'animated bounce alerting': globalVars.newChatAlert}"
+                         ng-if="globalVars.numUnreadChats">{{globalVars.numUnreadChats}}
+                    </div>
+                    <i ng-if="globalVars.missedChatsAlert"
+                       class="fas fa-comments text-warning animated bounce alerting"></i>
+                </a>
+            </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li class="visible-xs">
+                <a href="" ng-click="navCollapsed=true; appMainCtrl.goToMyEmployeeDetail()">
+                                <span ng-class="appMainCtrl.user.cache.presenceColor">
+                                    <i ng-class="appMainCtrl.user.cache.presenceIcon"></i>
+                                    {{appMainCtrl.user.cache.presenceLabel}}
+                                </span>
+                </a>
+            </li>
+            <li uib-dropdown ng-if="!globalVars.Settings.Is4xxDevice">
+                <a ng-href uib-dropdown-toggle>
+                    <span class="hidden-sm">{{::getLocalPhrase('Telephony')}} <b class="caret"></b></span>
+                    <span class="visible-sm"><b class="fa fa-phone"></b></span>
+                </a>
+                <ul uib-dropdown-menu role="menu" ng-click="navCollapsed=true">
+                    <li>
+                        <a ng-click="appMainCtrl.showModalDial()">
+                            <i ng-if="!globalVars.UsingUCServicesCP" class="fa fa-ban fa-fw text-info"></i>
+                            <i ng-if="globalVars.UsingUCServicesCP && !globalVars.IsCallProcessingAvailable"
+                               class="fa fa-ban fa-fw text-danger"></i>
+                            <i class="fa fa-th fa-fw"></i>
+                            {{::getLocalPhrase('Dial.Dial')}}
+                        </a>
+                    </li>
+                    <li ng-if="globalVars.supportsWebRTC">
+                        <a ng-click="appMainCtrl.startVideoConf()">
+                            <i class="fas fa-video fa-fw"></i>
+                            {{::getLocalPhrase('VideoConf')}}
+                        </a>
+                    </li>
+                    <li class="divider" ng-if="::!globalVars.IsSLTPhone"></li>
+                    <li ng-if="::!globalVars.IsSLTPhone">
+                        <a ng-href="" ng-click="appMainCtrl.page(-1)"><i class="fa fa-bullhorn fa-fw"></i>
+                            {{::getLocalPhrase('Page')}}...</a>
+                    </li>
+                    <li class="divider" ng-if="globalVars.NumberParkedCalls"></li>
+                    <li ng-repeat="(orbit, parkObj) in globalVars.ParkedCallStatus">
+                        <a href="" ng-click="appMainCtrl.unparkCall(orbit)">
+                            {{::getLocalPhrase('Unpark')}} {{::parkObj.CallDetails.CallerName}}
+                            ({{::parkObj.CallDetails.CallerID}}) ({{orbit}})
+                        </a>
+                    </li>
+                    <li>
+                        <a ng-href="" ng-click="appMainCtrl.toggleAnswerMode()"><i class="fas fa-headset fa-fw"></i>
+                            {{::getLocalPhrase('ToggleAnswerMode')}}</a>
+                    </li>
+                    <li class="divider" ng-if="::(globalVars.IsAttendant&&!globalVars.IsSLTPhone)"></li>
+                    <li ng-if="::(globalVars.IsAttendant&&!globalVars.IsSLTPhone)">
+                        <a ng-href="" ng-click="appMainCtrl.setNightMode(-1)"><i class="fa fa-moon-o fa-fw"></i>
+                            {{::getLocalPhrase('SetNightMode')}}...</a>
+                    </li>
+                </ul>
+            </li>
+
+            <li uib-dropdown ng-if="::globalVars.IsAgent && !globalVars.Settings.Is4xxDevice">
+                <a ng-href uib-dropdown-toggle>
+                    <div class="hidden-sm">
+                        <span class="badge alert-badge"
+                              ng-if="globalVars.AbandonedCallback && globalVars.NumAbandonedCalls>0">{{globalVars.NumAbandonedCalls}}</span>
+                        {{::getLocalPhrase('Agent')}} <b class="caret"></b>
+                    </div>
+                    <div class="visible-sm">
+                        <span class="badge alert-badge"
+                              ng-if="globalVars.AbandonedCallback && globalVars.NumAbandonedCalls>0">{{globalVars.NumAbandonedCalls}}</span>
+                        <b class="fas fa-headset"></b>
+                    </div>
+                </a>
+                <ul uib-dropdown-menu role="menu">
+                    <li>
+                        <a ng-href="">{{getLocalPhrase('StatusIs', [appMainCtrl.agentStateDisplay.label])}}</a>
+                    </li>
+                    <li class="divider" ng-if="::!globalVars.IsSLTPhone"></li>
+                    <li ng-if="appMainCtrl.agentCanLogin">
+                        <a ng-click="appMainCtrl.agentLogin()">
+                            <i class="fa fa-sign-in fa-fw text-primary"></i>{{::getLocalPhrase('AgentLogin')}}
+                        </a>
+                    </li>
+                    <li ng-if="appMainCtrl.agentCanEndBreak">
+                        <a ng-click="appMainCtrl.agentBreakOff()">
+                            <span class="fa fa-coffee fa-fw text-danger"></span>{{::getLocalPhrase('LeaveBreak')}}
+                        </a>
+                    </li>
+                    <li ng-if="appMainCtrl.agentCanEndWrap">
+                        <a ng-click="appMainCtrl.agentWrapOff()">
+                            <i class="fa fa-pencil-square-o fa-fw text-danger"></i>{{::getLocalPhrase('LeaveWrapUp')}}
+                        </a>
+                    </li>
+
+                    <li ng-if="appMainCtrl.agentCanBreak && !globalVars.EnhancedBreak">
+                        <a ng-click="appMainCtrl.agentBreakOn()">
+                            <span class="fa fa-coffee fa-fw"></span>{{::getLocalPhrase('StartBreak')}}
+                        </a>
+                    </li>
+                    <li ng-if="appMainCtrl.agentCanBreak && globalVars.EnhancedBreak"
+                        ng-repeat="breakCode in globalVars.BreakCodes" role="menuitem">
+                        <a ng-href=""
+                           ng-click="appMainCtrl.agentBreakOn(breakCode) && globalVars.BreakCodes.length>1"><i
+                            class="fa fa-coffee fa-fw"></i>Start {{breakCode.label}}</a>
+                    </li>
+                    <li ng-if="appMainCtrl.agentCanBreak && globalVars.EnhancedBreak" class="divider"></li>
+
+                    <li ng-if="appMainCtrl.agentCanBreak">
+                        <a ng-click="appMainCtrl.agentWrapOn()">
+                            <i class="fa fa-pencil-square-o fa-fw"></i>{{::getLocalPhrase('StartWrap')}}
+                        </a>
+                    </li>
+                    <li ng-if="appMainCtrl.agentCanAddQ">
+                        <a ng-click="appMainCtrl.agentLogin()">
+                            <i class="fa fa-plus-square-o fa-fw"></i>{{::getLocalPhrase('AddQ')}}
+                        </a>
+                    </li>
+                    <li ng-if="appMainCtrl.agentCanLogout">
+                        <a ng-click="appMainCtrl.agentLogout()">
+                            <i class="fa fa-sign-out fa-fw text-danger"></i>{{::getLocalPhrase('AgentLogout')}}
+                        </a>
+                    </li>
+                    <li ng-if="::appMainCtrl.agentCanMonitor" class="divider"></li>
+                    <li ng-if="::appMainCtrl.agentCanMonitor">
+                        <a ng-click="appMainCtrl.startAgentMonitor()">
+                            {{::getLocalPhrase('AgentMonitor')}}
+                        </a>
+                    </li>
+                    <li ng-if="::appMainCtrl.agentCanMonitor">
+                        <a ng-click="appMainCtrl.startQueueMonitor()">
+                            {{::getLocalPhrase('QueueMonitor')}}
+                        </a>
+                    </li>
+                    <li ng-if="appMainCtrl.agentCanMonitor && globalVars.AbandonedCallback">
+                        <a ng-click="appMainCtrl.startAbandonedCalls()">
+                            {{::getLocalPhrase('MonitorAbandonedCalls')}}
+                            <div class="badge alert-badge" ng-if="globalVars.NumAbandonedCalls">
+                                {{globalVars.NumAbandonedCalls}}
+                            </div>
+                        </a>
+                    </li>
+                    <li ng-if="::globalVars.IsAgent">
+                        <a ng-click="appMainCtrl.showRecentCalls()">
+                            {{::getLocalPhrase('ShowRecentCalls')}}
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li uib-dropdown>
+                <a href="#" uib-dropdown-toggle>
+                    {{::appMainCtrl.extension}} <b class="hidden-sm caret"></b>
+                </a>
+                <ul uib-dropdown-menu role="menu" ng-click="navCollapsed=true">
+                    <li class="hidden-xs">
+                        <a href="" ng-click="appMainCtrl.goToMyEmployeeDetail()">
+                                <span ng-class="appMainCtrl.user.cache.presenceColor">
+                                    <i ng-class="appMainCtrl.user.cache.presenceIcon"></i>
+                                    {{appMainCtrl.user.cache.presenceLabel}}
+                                </span>
+                        </a>
+                    </li>
+                    <li><a href="" ng-click="appMainCtrl.editBuddyListClicked()"><span class="fa fa-fw"></span>
+                        {{::appMainCtrl.getBuddyListMenuLabel()}}</a></li>
+                    <li class="hidden-xs" ng-if="globalVars.ExtendedProperties.CanEditUserSettings"><a href=""
+                                                                                                       ng-click="appMainCtrl.launchSettings()"><span
+                        class="fa fa-cog fa-fw"></span>
+                        {{::getLocalPhrase('Menu.Settings')}}</a></li>
+                    <li class="hidden-xs nav-divider"></li>
+                    <li class="hidden-xs"><a href="" ng-click="appMainCtrl.logout()"><span class="fa fa-fw"></span>
+                        {{::getLocalPhrase('Menu.SignOut')}}</a></li>
+                    <li class="nav-divider"></li>
+                    <li><a href="" ng-click="appMainCtrl.showHelp()"><span class="fa fa-fw"></span>
+                        {{::getLocalPhrase('Menu.Help')}}</a></li>
+                    <li><a href="" ng-click="appMainCtrl.showAbout()"><span class="fa fa-fw"></span>
+                        {{::getLocalPhrase('Menu.About')}}</a></li>
+                    <li class="nav-divider" ng-if="::globalVars.PhoneProURL"></li>
+                    <li ng-if="::globalVars.PhoneProURL">
+                        <a href="" ng-click="appMainCtrl.launchPhonePro()">
+                            <img ng-src="resources/images/phonepro.png" class="img-responsive pull-left"
+                                 style="max-width:16px">
+                            <span class="pull-left" style="margin-left:0.5em">{{::getLocalPhrase('Settings.Button.LaunchPhonePro')}}</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href ng-click='appMainCtrl.goToMyEmployeeDetail()' class="presenceImage">
+                    <img ng-src="{{appMainCtrl.user.photo}}" class="img-responsive hidden-xs"
+                         style="max-height: 40px"/>
+                </a>
+            </li>
+            <li class="visible-xs" ng-if="globalVars.ExtendedProperties.CanEditUserSettings"><a href=""
+                                                                                                ng-click="navCollapsed=true; appMainCtrl.launchSettings()"><span
+                class="fa fa-cog fa-fw"></span>
+                {{::getLocalPhrase('Menu.Settings')}}</a></li>
+            <li class="visible-xs"><a href="" ng-click="appMainCtrl.logout()"><span class="fa fa-fw"></span>
+                {{::getLocalPhrase('Menu.SignOut')}}</a></li>
+        </ul>
+    </div><!-- /.navbar-collapse -->
+</nav>
+<div class="rp-fixed-top"
+     style="position:fixed; top: 50px; left:0;right:0;z-index: 1000;background: rgb(245, 245, 245);">
+    <div class="pull-left toolbar-item" ng-if="globalVars.Settings.EnableAgent">
+        <div class="pull-left"
+             style="padding: 3px 0px 3px 0px; width:150px; height: 100%">
+            <small>{{::getLocalPhrase('Agent')}}</small>
+            <br/>
+            <span ng-class="appMainCtrl.agentStateDisplay.color">
+                <small>
+                    <div class="pull-left"
+                         style="width: 12rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">
+                        <i ng-class="appMainCtrl.agentStateDisplay.image"></i>
+                        <span>{{appMainCtrl.agentStateDisplay.label}}</span>
+                    </div>
+                    <span class="pull-left badge info-badge"
+                          ng-if="appMainCtrl.numLoggedInQueues()"
+                          style="margin-left:0.2em"
+                          uib-popover="{{appMainCtrl.myLoggedInQueues()}}"
+                          popover-trigger="'mouseenter focus'"
+                          popover-placement="bottom-left"
+                          popover-append-to-body="true">{{appMainCtrl.numLoggedInQueues()}}</span>
+                </small>
+            </span>
+        </div>
+        <div class="pull-left btn-group" role="group" style="margin-top:10px">
+            <div class="btn-group btn-group-sm">
+                <button class="btn btn-default" ng-click="appMainCtrl.agentLogin()" ng-if="appMainCtrl.agentCanLogin"
+                        tooltip-placement="bottom" uib-tooltip="{{::getLocalPhrase('AgentLogin')}}"><i
+                    class="fa fa-sign-in text-primary"></i>
+                </button>
+            </div>
+            <div class="btn-group btn-group-sm">
+                <button class="btn btn-default" ng-click="appMainCtrl.agentBreakOff()"
+                        ng-if="appMainCtrl.agentCanEndBreak"
+                        tooltip-placement="bottom" uib-tooltip="{{::getLocalPhrase('LeaveBreak')}}"><span
+                    class="fa fa-coffee text-warning"></span>
+                </button>
+            </div>
+            <div class="btn-group btn-group-sm">
+                <button class="btn btn-default" ng-click="appMainCtrl.agentWrapOff()"
+                        ng-if="appMainCtrl.agentCanEndWrap"
+                        tooltip-placement="bottom" uib-tooltip="{{::getLocalPhrase('LeaveWrapUp')}}"><i
+                    class="fa fa-pencil-square-o text-warning"></i>
+                </button>
+            </div>
+            <div class="btn-group btn-group-sm" ng-show="!globalVars.EnhancedBreak">
+                <button class="btn btn-default" ng-click="appMainCtrl.agentBreakOn()" ng-if="appMainCtrl.agentCanBreak"
+                        tooltip-placement="bottom" uib-tooltip="{{::getLocalPhrase('StartBreak')}}"><span
+                    class="fa fa-coffee"></span>
+                </button>
+            </div>
+            <div class="btn-group btn-group-sm" uib-dropdown ng-show="globalVars.EnhancedBreak">
+                <button type="button" class="btn btn-default" uib-dropdown-toggle ng-if="appMainCtrl.agentCanBreak"
+                        tooltip-placement="bottom" uib-tooltip="{{::getLocalPhrase('StartBreak')}}">
+                    <span
+                        class="fa fa-coffee">
+                    </span>
+                </button>
+                <ul class="dropdown-menu" uib-dropdown-menu role="menu">
+                    <li ng-repeat="breakCode in globalVars.BreakCodes" role="menuitem">
+                        <a ng-href="" ng-click="appMainCtrl.agentBreakOn(breakCode)">{{breakCode.label}}</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="btn-group btn-group-sm">
+                <button class="btn btn-default" ng-click="appMainCtrl.agentWrapOn()" ng-if="appMainCtrl.agentCanBreak"
+                        tooltip-placement="bottom" uib-tooltip="{{::getLocalPhrase('StartWrap')}}"><i
+                    class="fa fa-pencil-square-o"></i>
+                </button>
+            </div>
+            <div class="btn-group btn-group-sm">
+                <button class="btn btn-default" ng-click="appMainCtrl.agentLogin()" ng-if="appMainCtrl.agentCanAddQ"
+                        tooltip-placement="bottom" uib-tooltip="{{::getLocalPhrase('AddQ')}}"><i
+                    class="fa fa-plus-square-o"></i>
+                </button>
+            </div>
+        </div>
+        <button class="pull-left btn btn-default btn-sm" style="margin-top:10px;margin-left:0.5em"
+                ng-click="appMainCtrl.agentLogout()" ng-if="appMainCtrl.agentCanLogout"
+                tooltip-placement="bottom" uib-tooltip="{{::getLocalPhrase('AgentLogout')}}"><i
+            class="fa fa-sign-out text-danger"></i>
+        </button>
+        <div class="pull-left rp-vr"></div>
+    </div>
+    <div class="pull-left toolbar-item" ng-if="globalVars.Settings.EnableDialer">
+        <div class="pull-left" style="margin-top: 18px">
+            <a ng-click="appMainCtrl.showModalDial()" class="text-center small"style="font-size: 15px;color: #2b9d58;">
+                <i ng-if="::globalVars.UsingUCServicesCP===false" class="fa fa-ban fa-fw text-info"></i>
+                <span ng-if="::globalVars.UsingUCServicesCP">
+                            <i ng-if="!globalVars.IsCallProcessingAvailable" class="fa fa-ban fa-fw text-danger"></i>
+                        </span>
+                <i class="fa fa-th fa-fw"></i>
+                {{::getLocalPhrase('Dial.Dial')}}
+            </a>
+        </div>
+        <div class="pull-left rp-vr"></div>
+    </div>
+    <div class="pull-left toolbar-item" ng-if="globalVars.Settings.TestDriver.enabled">
+        <div class="pull-left" style="margin-top: 18px">
+            <a ng-click="appMainCtrl.showTestDriver()" class="text-center text-danger small">
+                <i class="fa fa-bug fa-fw"></i>
+                Test driver
+            </a>
+        </div>
+        <div class="pull-left rp-vr"></div>
+    </div>
+    <div class="pull-left toolbar-item" ng-if="globalVars.Settings.EnableCallPark">
+        <div class="pull-left"
+             style="padding: 3px 0px 3px 0px; width:75px; height: 100%">
+            <small><i class="fa fa-car"></i> {{::getLocalPhrase('CallParking')}}</small>
+        </div>
+        <div class="pull-left btn-group" role="group" style="margin-left:0.5em;margin-top:14px">
+            <div class="btn-group btn-group-xs" uib-dropdown is-open="status.parkIsOpen">
+                <button type="button" class="btn btn-default" uib-dropdown-toggle
+                        ng-disabled="appMainCtrl.callsToPark().length==0">{{::getLocalPhrase('Park')}} <i
+                    class="caret"></i>
+                </button>
+                <ul uib-dropdown-menu role="menu">
+                    <li role="menuitem" ng-repeat="orbit in globalVars.Settings.HistoryCallParks">
+                        <a href="" ng-click="appMainCtrl.parkCall(orbit)">{{orbit}}</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li role="menuitem"><a href=""
+                                           ng-click="appMainCtrl.parkCall(-1)">{{::getLocalPhrase('Park')}}...</a></li>
+                </ul>
+            </div>
+            <div class="btn-group btn-group-xs" uib-dropdown is-open="status.unParkIsOpen">
+                <button type="button" class="btn btn-default" uib-dropdown-toggle
+                        ng-disabled="globalVars.NumberParkedCalls==0">
+                    <span class="text-danger">{{::getLocalPhrase('Unpark')}} <i class="caret"></i></span>
+                </button>
+                <ul uib-dropdown-menu role="menu">
+                    <li role="menuitem" ng-repeat="(orbit, parkObj) in globalVars.ParkedCallStatus">
+                        <a href="" ng-click="appMainCtrl.unparkCall(orbit)">
+                            {{orbit}} - <span> {{::parkObj.CallDetails.CallerName}}</span><span> ({{::parkObj.CallDetails.CallerID}})</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="pull-left rp-vr"></div>
+    </div>
+    <div class="pull-left toolbar-item" ng-if="globalVars.Settings.EnableValet">
+        <button class="pull-left btn btn-default btn-xs"
+                style="margin-top:14px"
+                ng-click="appMainCtrl.doValet()"
+                ng-disabled="appMainCtrl.callsToPark().length==0"><i
+            class="fa fa-black-tie"></i> Park valet
+        </button>
+        <div class="pull-left rp-vr"></div>
+    </div>
+    <div class="pull-left toolbar-item" ng-if="globalVars.Settings.EnableParkMonitor">
+        <div class="pull-left" style="padding: 3px; width: 80px; height: 100%">
+            <small><i class="fa fa-eye"></i> {{::getLocalPhrase('ParkMonitor')}}</small>
+        </div>
+        <div class="pull-left park-orbit-container"
+             ng-repeat="parkObj in globalVars.parksToMonitorStatus track by $index">
+            <div class="park-orbit-number">
+                <a href=""
+                   uib-popover-template="'views/templates/parkedCallDetails.tmpl.html'"
+                   popover-title=""
+                   popover-placement="bottom"
+                   popover-trigger="'focus mouseenter'"
+                   popover-append-to-body="false">
+                    {{parkObj.Orbit}}
+                </a>
+            </div>
+            <div class="park-orbit" ng-class="{'park-orbit-parked': parkObj.IsOccupied}"
+                 ng-click="appMainCtrl.togglePark(parkObj)">
+                <a href=""
+                   uib-popover-template="'views/templates/parkedCallDetails.tmpl.html'"
+                   popover-title=""
+                   popover-placement="bottom"
+                   popover-trigger="'focus mouseenter'"
+                   popover-append-to-body="false"><i ng-if="parkObj.IsOccupied" class="fa fa-car"></i></a>
+            </div>
+        </div>
+        <div class="pull-left rp-vr"></div>
+    </div>
+    <div class="pull-left toolbar-item" ng-if="globalVars.Settings.EnablePaging">
+        <div class="pull-left"
+             style="padding: 3px 0px 3px 0px; width:80px; height: 100%">
+            <small><i class="fa fa-bullhorn"></i> {{::getLocalPhrase('Page')}}</small>
+        </div>
+        <div class="pull-left" style="margin-top: 14px">
+            <div class="btn-group btn-group-xs" uib-dropdown is-open="status.parkIsOpen">
+                <button type="button" class="btn btn-default"
+                        ng-disabled="globalVars.Settings.Paging.LastPage.number<=0"
+                        ng-click="appMainCtrl.page(globalVars.Settings.Paging.LastPage)">
+                    {{globalVars.Settings.Paging.LastPage.label}}
+                </button>
+                <button type="button" class="btn btn-default" uib-dropdown-toggle>
+                    <i class="caret"></i>
+                </button>
+                <ul uib-dropdown-menu role="menu">
+                    <li role="menuitem"
+                        ng-repeat="pageObj in globalVars.Settings.Paging.History track by $index">
+                        <a href="" ng-click="appMainCtrl.page(pageObj)">{{pageObj.label}}</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li role="menuitem"><a href="" ng-click="appMainCtrl.page(-1)">Page...</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="pull-left rp-vr"></div>
+    </div>
+    <div class="input-group" ng-if="canSearchPage  && globalVars.Settings.EnableSearchBar" style="width:100%">
+        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+        <input class="form-control" placeholder="Search" ng-change="appMainCtrl.filterTextChanged()"
+               ng-model="appMainCtrl.filterText" type="search" ng-trim="false"/>
+
+        <div class="input-group-btn">
+            <button class="btn btn-default" ng-click="appMainCtrl.filterText=''; appMainCtrl.filterTextChanged()"><span
+                class="fas fa-times"></span></button>
+            <button class="btn " ng-class="appMainCtrl.contactFilterEnabled ? 'btn-danger': 'btn-primary'"
+                    ng-click="appMainCtrl.updateContactFilter()" ng-if="allowEditContacts"><span
+                class="fas fa-filter"></span></button>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid"
+     style="margin: 134px 8px 40px;"
+     ng-style="appMainCtrl.rpMarginTop">
+
+    <div ng-if="globalVars.hasVideo" class="text-center" ng-class="globalVars.videoClass"
+         ng-style="{'top': appMainCtrl.rpMarginTop.top}"> <!-- video-top -->
+        <ng-include src="'videoCalls.tmpl.html'"></ng-include>
+    </div>
+
+    <div ng-class="globalVars.mainClass">
+        <!-- Active Calls -->
+        <div id="idActiveCallWindow" style="padding-top:10px;" ng-controller="ActiveCallsCtrl as activeCallsCtrl">
+            <!-- DEBUG <pre>{{seeIncomingAndActive()|json}}</pre>-->
+            <div ng-if="activeCallsCtrl.visibleCallsArr.length">
+                <div class="activeCallContainer">
+                    <div ng-repeat="activeCallObj in activeCallsCtrl.visibleCallsArr">
+                        <rp-active-call></rp-active-call>
+                    </div>
+                </div>
+            </div>
+
+            <div id="idRecentCalls" ng-controller="AgentCallDispCtrl as agentCallDispCtrl"
+                 ng-show="$root.globalVars.ShowRecentCalls" style="width: 100%; max-height: 50vh">
+                <ng-include src="'views/templates/showRecentCalls.tmpl.html'"></ng-include>
+            </div>
+
+            <hr style="margin-top:0px; margin-bottom: 15px"
+                ng-if="activeCallsCtrl.visibleCallsArr.length || $root.globalVars.ShowRecentCalls"/>
+
+        </div>
+
+        <div ng-controller="ContactsNewCtrl as contactsNewCtrl" style="background-color: #f2f2f2"
+             ng-if="$root.showHomePageContactsSearch">
+            <div uib-alert ng-repeat="error in contactsNewCtrl.errors" class="alert-danger"
+                 ng-if="contactsNewCtrl.errors"
+                 close="contactsNewCtrl.errorTextClosed($index)">{{error}}
+            </div>
+            <div scroll-glue="false"
+                 style="overflow: auto;" ng-style="{'height': $root.ContactsSearchHeight}">
+                <ng-include src="'views/templates/contactsNew.tmpl.html'"></ng-include>
+            </div>
+            <hr style="margin-top: 5px; margin-bottom: 15px"/>
+        </div>
+        <div id="idUCSuiteMain" ui-view="main"></div>
+        <div ng-if="::globalVars.DebugWindow">
+            <hr/>
+            <div ng-repeat="logLine in bufferedConsoleLog track by $index">{{logLine}}</div>
+        </div>
+
+    </div>
+</div>
+<!-- footer -->
+<div id="idUCSuiteFooter" class="navbar navbar-default navbar-inverse navbar-fixed-bottom visible-xs">
+
+    <div class="container" style="padding-left: 2px;padding-right: 2px;padding-top: 2px;">
+        <div class="pull-left" style="width:25%">
+            <!-- Split button -->
+            <button ng-if="::globalVars.deviceWidth<360" type="button"
+                    class="btn btn-block btn-default " ng-class="appMainCtrl.getTabClass('home')"
+                    ng-click="appMainCtrl.setTabClass('home'); appMainCtrl.goToHomePage()"  style="background-image: linear-gradient(rgb(87, 89, 88) 0px, rgb(19, 19, 19) 100%);background-repeat: repeat-x;text-shadow: rgb(36, 45, 38) 0px 1px 0px;border-color: rgb(34, 36, 36);color: azure;height: 40px;"  >
+                <span class="fa fa-home"></span><span class="hidden-xs"> {{::getLocalPhrase('Label.Home')}}</span>
+            </button>
+            <div ng-if="::globalVars.deviceWidth>=360" class="btn-group btn-block uib-dropup" uib-dropdown
+                 style="width:100%;display:flex;display:-webkit-flex;flex-direction: row;-webkit-flex-direction: row;flex-wrap: wrap;-webkit-flex-wrap: wrap;justify-content: flex-start;-webit-justify-content: flex-start;align-content: flex-start; -webkit-align-content: flex-start; align-items: flex-start; -webkit-align-items: flex-start">
+                <button type="button"
+                        style="background-image: linear-gradient(rgb(87, 89, 88) 0px, rgb(19, 19, 19) 100%);background-repeat: repeat-x;text-shadow: rgb(36, 45, 38) 0px 1px 0px;border-color: rgb(34, 36, 36);color: azure;height: 40px;width: 60%;"
+                        class="btn btn-default" ng-class="appMainCtrl.getTabClass('home')"
+                        ng-click="appMainCtrl.setTabClass('home'); appMainCtrl.goToHomePage()" >
+                    <span class="fa fa-home"></span><span class="hidden-xs"> {{::getLocalPhrase('Label.Home')}}</span>
+                </button>
+                <button type="button"
+                       style="flex-grow: 0; flex-shrink: 0; width: 35px;background-image: linear-gradient(to bottom,#a2a2a2 0,#1a1a1a 100%);filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ffe0e0e0', GradientType=0);filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);background-repeat: repeat-x;/*! border-color: #dbdbdb; */text-shadow: 0 1px 0 #242d26;border-color: #222424;color: azure;height: 40px;" 
+                        ng-if="appMainCtrl.getBuddyLists().length>1"
+                        class="btn btn-default" uib-dropdown-toggle>
+                    <span class="caret"></span>
+                </button>
+                <ul uib-dropdown-menu class="btn-block" role="menu">
+                    <li ng-repeat="buddyListObj in appMainCtrl.getBuddyLists()">
+                        <a ng-click="appMainCtrl.goToBuddyListName( buddyListObj.ID, true)" href="">{{ buddyListObj.name
+                            }}
+                            <span ng-if="buddyListObj.default" class="fa fa-heart text-danger"></span>
+                            <span ng-if="buddyListObj.current" class="fa fa-check text-info"></span>
+                        </a>
+                    </li>
+                    <li class="divider"></li>
+                    <li><a href="" ng-click="appMainCtrl.editBuddyListClicked()">{{::appMainCtrl.getBuddyListMenuLabel()}}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="pull-left" style="width:25%">
+            <button class="btn btn-block btn-default " ng-class="appMainCtrl.getTabClass('directory')"
+                    ng-click="appMainCtrl.setTabClass('directory'); appMainCtrl.goToContactsPage()" style="background-image: linear-gradient(rgb(87, 89, 88) 0px, rgb(19, 19, 19) 100%);background-repeat: repeat-x;text-shadow: rgb(36, 45, 38) 0px 1px 0px;border-color: rgb(34, 36, 36);color: azure;height: 40px;"  >
+                <i class="fa fa-users" style="font-size: 12px;" ></i>
+				<span style="font-size: 10px;"> Contacts</span>
+				
+				<span class="hidden-xs"> {{::getLocalPhrase('Label.Contacts')}}</span>
+            </button>
+        </div>
+        <div class="pull-left" style="width:25%">
+            <button class="btn btn-block btn-default" ng-class="appMainCtrl.getTabClass('callHistory')"
+                    ng-click="appMainCtrl.setTabClass('callHistory'); appMainCtrl.goToCallHistoryPage()" style="background-image: linear-gradient(rgb(87, 89, 88) 0px, rgb(19, 19, 19) 100%);background-repeat: repeat-x;text-shadow: rgb(36, 45, 38) 0px 1px 0px;border-color: rgb(34, 36, 36);color: azure;height: 40px;" >
+             <i class="fa fa-history" style="font-size: 12px;"></i>
+			 	<span style="font-size: 10px;"> Call Logs</span>
+			 
+			 
+			 <span class="hidden-xs"> {{::getLocalPhrase('Label.CallHistory')}}</span>
+
+                <span class="badge" style="color: rgb(255, 255, 255);background-color: #fd1212;" ng-class="{'animated bounce alerting': globalVars.MissedCalls}"
+                      ng-if="globalVars.MissedCalls">{{globalVars.MissedCalls}}
+                </span>
+            </button>
+        </div>
+        <div class="pull-left" style="width:25%" ng-if="globalVars.CanChat">
+            <button class="btn btn-block btn-default " ng-class="appMainCtrl.getTabClass('chats')"
+                    ng-click="appMainCtrl.setTabClass('chats'); appMainCtrl.goToChatsPage()" style="background-image: linear-gradient(rgb(87, 89, 88) 0px, rgb(19, 19, 19) 100%);background-repeat: repeat-x;text-shadow: rgb(36, 45, 38) 0px 1px 0px;border-color: rgb(34, 36, 36);color: azure;height: 40px;" >
+                <span class="fa fa-comment-o"  style="font-size: 12px;"></span>   <span style="font-size: 10px;"> Chats</span>  <span
+                class="hidden-xs"> {{::getLocalPhrase('Chats')}} </span>
+
+                <span class="badge" ng-class="{'animated bounce alerting': globalVars.newChatAlert} " style="color: rgb(255, 255, 255);background-color: #13b334;"
+                      ng-if="globalVars.numUnreadChats">{{globalVars.numUnreadChats}}
+                </span>
+            </button>
+        </div>
+    </div>
+</div>
+

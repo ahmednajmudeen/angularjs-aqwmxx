@@ -1,0 +1,297 @@
+ 
+
+
+
+ <div class="portlet-body" style="padding: 20px 20px 20px 20px;background-color: #ffffff4a;/*! width: 400px; */margin-right: 5px;/*! position: fixed; *//*! height: ; *//*! text-align: center; *//* background: linear-gradient( 
+-45deg
+ , #ccdeff, #ceebf9, #8ec5c4de, #88e6cc); *//* background-size: 200% 100%; *//* animation: gradient 10s cubic-bezier(0.55, 0.06, 0.68, 0.19) infinite; */padding-left: 5%;border-radius: 20px;padding-right: 5%;vertical-align: center;align-content: center;margin-top: 18px;min-width: 397px;"  >
+   <section class="" style="/*! position: absolute; *//*! height: 400px; */vertical-align: center;/*! width: 500px; *//*! padding-left: 10%; *//*! padding-right: 10%; */align-content: center;">
+    
+  <div class="portlet-title" style="font-family: 'Open Sans', sans-serif;font-size: 22px;color: #333333;font-weight: 600;/*! margin-right: 10px; */">
+			 
+                <div class="caption" style="border-bottom: 1px solid #ECEFF0;padding: 0 0 7px;margin-bottom: 10px;margin-right: ;color: #319540;">
+				
+				
+				    <span ng-class="getCallDirectionClasses(activeCallObj)"> </span> CALL
+				
+			
+				<span class="pad" style="margin-right: 5px;margin-left: 5px;/*! width: 70%; */"> </span>
+				
+				
+			<span class="Loader-active" style="height: 25px;width: 200px;position: relative;">
+                    <div class="Bar"></div>
+                    <div class="Bar"></div>
+                    <div class="Bar"></div>
+                    <div class="Bar"></div>
+                  </span>
+                  
+                  <span class="timer active float-right" style="color: #22D67E;float: right !important;font-size: 17px;margin-top: 5px;">{{activeCallObj.duration | displayDuration}}</span>
+                </div>
+				
+				
+				
+				
+				
+				
+              </div>
+			  
+			  
+			  
+        <!-- regular mode -->
+		
+		
+		  <div class="row call-details" ng-if="!activeCallObj.isConference || !activeCallObj.conferenceOriginator" style="line-height: 18px;flex-wrap: wrap;margin-right: 15px;display: flex;margin-left: 10px;width: 100%;/*! right: 0; */" >
+		    
+         <div class="col-7" style="/*! flex: 0 0 50.333333%; */width: 50%;" ng-class="activeCallObj.callConnected ? 'call-connected':null">
+         
+        
+				  
+           <img ng-src="{{activeCallObj.imageURL}}" style="max-width:70px;/*! padding-bottom: 1opx; */padding: 2px;margin-bottom: 5px;"
+                     alt=""/>
+					 
+					 <div class="caller-title"> {{activeCallObj.name}}</div> 
+				
+                <div class="caller-phone" style="font-family: 'Open Sans', sans-serif;font-size: 18px;/*! font-style: oblique; */font-weight: bold;/*! margin-top: 5px; */color: #536268;/*! margin-bottom: 5px; */margin-left: 10px;">  {{activeCallObj.number}}</div> 
+           
+	<div style="font-size: 12px;">
+         
+              
+           <span ng-if="!activeCallObj.onHold" ng-class="getPhoneImageClass(activeCallObj)" style="color: #1a73e3;/*! font-size: 14px; */" > <i style="/*! font-family: Arial; */font-family: &quot;Helvetica Neue&quot;,Helvetica,Arial,sans-serif;font-style: normal;font-size: 12px;font-weight: normal;"> </i></span >
+                         
+     <span class="fa fa-pause text-danger" ng-if="activeCallObj.onHold" style="color: #1a73e3;/*! font-size: 16px; */" ><i style="/*! font-family: Arial; */font-family: &quot;Helvetica Neue&quot;,Helvetica,Arial,sans-serif;font-style: normal;font-size: 12px;"></i></span>
+
+
+		   </div>
+			
+		
+                      <!----><!---->
+              <!---->
+           
+			
+			
+			
+			
+                            
+            </div>
+
+
+
+
+
+
+
+
+			  <div class="col-2" style="/*! flex: 0 0 16.666667%; *//*! float: right; */width: 50%;display: flex;/*! align-content: center; *//*! text-align: right; *//*! padding-left: 0%; *//*! padding-right: 0%; *//*! float: right; *//*! display: flex; */justify-content: right;align-items: center;/*! height: 200px; */">
+			   
+			   
+			   
+			   
+			   
+			   
+
+			  
+				<button  ng-if="activeCallObj.canAnswer && !globalVars.IsSLTPhone" ng-click="onAnswer(activeCallObj, $index)" class="answer phone is-animating" title="Answer Call" style="color: #FFF;background: #17AC43;border-radius: 50%;border: none;font-size: 28px;height: 42px;width: 42px;padding: 0;margin: 5px;animation: phone-outer 3000ms infinite;"><i class="mdi mdi-48 mdi-phone" style="color: #FFF;/*! background: #FF3C3A; */border-radius: 50%;border: none;font-size: 28px;height: 42px;width: 42px;padding: 0;margin: 5px;"></i></button>
+				
+				
+              
+				<button ng-if="activeCallObj.canRedirect && !globalVars.IsSLTPhone" ng-click="onRedirectToVM(activeCallObj, $index)" class="voicemail" title="Send to Voicemail" style="color: #95989A;background: #EEE;border-radius: 50%;border: none;font-size: 32px;height: 58px;width: 58px;padding: 0;font-size: 32px;height: 42px;width: 42px;margin: 5px;"><i class="mdi mdi-48 mdi-voicemail"></i></button>
+				
+				
+			
+				
+				
+				
+               
+				
+				<button class="hold" ng-if="activeCallObj.canHold"   ng-click="onHold(activeCallObj)"
+                    title="Put Call on Hold" style="color: #95989A;background: #EEEEEE;border-radius: 50%;border: none;font-size: 32px;height: 42px;width: 42px;padding: 0;"><i class="mdi mdi-48 mdi-pause"></i></button>
+				
+				
+				
+					
+				
+                <div  ng-if="activeCallObj.canTransfer">
+                    <button  ng-click="onTransfer(activeCallObj, globalVars.DefaultTransfer)" title="Swap Calls" data-toggle="tooltip" data-placement="top" style="color: #95989A;background: #EEEEEE;border-radius: 50%;border: none;font-size: 32px;height: 42px;width: 42px;padding: 0;" class=""><i class="mdi mdi-48 mdi-swap-horizontal"></i></button>
+                    <div class="pull-left" uib-dropdown style="padding-left: 0.5em">
+                        <a uib-dropdown-toggle="">
+                            <i class="far fa-caret-square-down" style="font-size: 125%"></i>
+                        </a>
+                        <ul uib-dropdown-menu role="menu">
+                            <li role="menuitem" ng-repeat="transferOption in globalVars.TransferOptions">
+                                <a href=""
+                                   ng-click="setTransfer(transferOption)"><i
+                                    ng-class="transferOption.icon"></i> {{transferOption.label}}</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+				
+				
+				
+				
+                <button ng-if="activeCallObj.canRetrieve" ng-click="onResume(activeCallObj)" class="hold-active" title="Resume Call" style="border-radius: 50%;border: none;font-size: 32px;height: 42px;width: 42px;padding: 0;color: #FFF;background: #FFAF32;"><i class="mdi mdi-48 mdi-pause"></i></button>
+				
+				
+	
+                    
+					<button ng-if="activeCallObj.canHangup && !activeCallObj.isConsult" ng-click="onHangup(activeCallObj, $index)" title="End Call" style="color: #FFF;background: #FF3C3A;border-radius: 50%;border: none;font-size: 28px;height: 42px;width: 42px;padding: 0;margin: 5px;"><i class="mdi mdi-48 mdi-phone-hangup"></i></button>
+					
+					
+			   
+			   
+			   
+			   
+			   
+			   
+			   
+			   
+			   
+			   
+			   
+			   
+        </div>
+		
+
+
+
+
+
+
+
+
+
+
+
+		   </div>
+            
+         
+	
+		
+		
+		
+		
+        <!-- conference mode -->
+        <div ng-if="activeCallObj.isConference && activeCallObj.conferenceOriginator">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <span class="fa fa-group"></span>&nbsp;
+                                <span ng-switch="activeCallObj.children.length">
+                                    <span ng-switch-when="1">{{getLocalPhrase('Conference.OneParty')}}</span>
+                                    <span ng-switch-default>{{getLocalPhrase('Conference.MoreThanOneParty', [ activeCallObj.children.length ])}}</span>
+                                </span>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <tr ng-repeat="conferencePartyObj in getConferenceEntries(activeCallObj) ">
+                            <td><span ng-class="getCallDirectionClasses(conferencePartyObj)"></span></td>
+                            <td>{{conferencePartyObj.displayCallerID }}
+                            </td>
+                            <td>{{conferencePartyObj.displayName }}
+                            </td>
+                            <td><span>{{conferencePartyObj.duration | displayDuration}}</span></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <!-- button group to join and/or stop conference -->
+            <div class="btn-group btn-group-justified btn-group-xs" ng-if="activeCallObj.joinCall"
+                 style="padding-bottom: 10px">
+                <div class="btn-group" ng-if="activeCallObj.joinCall.canComplete">
+                    <button type="button" class="btn btn-success btn-sm"
+                            ng-click="onComplete(activeCallObj.joinCall)">
+                        <span class="fa fa-share-alt fa-rotate-270"></span>
+                        <span> {{::getLocalPhrase('Join')}}</span>
+                    </button>
+                </div>
+                <div class="btn-group"
+                     ng-if="(activeCallObj.joinCall.state !== 'Conferenced' && activeCallObj.joinCall.isConsult && activeCallObj.joinCall.parent)">
+                    <button type="button" class="btn btn-default btn-sm"
+                            ng-click="onStopTransfer(activeCallObj.joinCall)">
+                        <span class="glyphicon glyphicon-phone-alt text-danger"></span>
+                        <span> {{::getLocalPhrase('Cancel')}}</span>
+                    </button>
+                </div>
+            </div>
+            <!-- call to join -->
+            <div class="panel panel-default"
+                 ng-style="{'border-color' : getMainBorderColor(activeCallObj.joinCall)}"
+                 ng-if="activeCallObj.joinCall">
+                <div class="panel-body" style="padding:2px; margin: 2px;">
+                    <div class="row">
+                        <div class="col-xs-2 text-center"
+                             ng-class="activeCallObj.joinCall.callConnected ? 'call-connected':null">
+                            <span ng-class="getCallDirectionClasses(activeCallObj.joinCall)"></span>
+                        </div>
+                        <div class="col-xs-7">
+                            {{activeCallObj.joinCall.displayCallerID}}
+                        </div>
+                        <div class="col-xs-3 text-right">
+                            <span ng-class="getDurationClass(activeCallObj.joinCall)">{{activeCallObj.joinCall.duration | displayDuration}}</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-offset-2 col-xs-7">
+                            {{activeCallObj.joinCall.displayName}}
+                        </div>
+                        <div class="col-xs-3 text-center pull-right">
+                                        <span ng-if="!activeCallObj.joinCall.onHold"
+                                              ng-class="getPhoneImageClass(activeCallObj.joinCall)"></span>
+                            <span class="fa fa-pause text-danger" ng-if="activeCallObj.joinCall.onHold"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+      
+      
+		
+		
+		
+		
+          
+               
+
+				
+				
+				
+				
+				
+                <div class="activeCallButtonCell"
+                     ng-if="(activeCallObj.canComplete && activeCallObj.isConsult) || (activeCallObj.state !== 'Conferenced' && activeCallObj.isConsult && activeCallObj.parent)">
+                    <a ng-href=""
+                       ng-click="onStopTransfer(activeCallObj, $index)">
+                        <span class="fa fa-phone fa-idle-phone text-danger"></span>
+                        <span> {{::getLocalPhrase('Cancel')}}</span>
+                    </a>
+                </div>
+				
+		
+           
+        </div>
+        <div class="pull-right" style="margin-top:1em">
+            <div uib-dropdown ng-if="activeCallObj.state === 'Connected'">
+                <a uib-dropdown-toggle="">
+                    <span class="fas fa-ellipsis-v"></span>
+                </a>
+                <ul uib-dropdown-menu role="menu">
+                    <li role="menuitem" ng-if="activeCallObj.canVideo"><a href ng-click="onAddVideo(activeCallObj)"><i
+                        class="fas fa-video fa-fw"></i> Video</a></li>
+                    <li role="menuitem" ng-if="activeCallObj.canConference"><a href=""
+                                                                               ng-click="onAddCall(activeCallObj)"><i
+                        class="fa fa-group fa-fw"></i>
+                        {{::getLocalPhrase('AddCall')}}</a></li>
+                    <li class="divider" ng-if="::!globalVars.IsSLTPhone"></li>
+                    <li role="menuitem" ng-repeat="orbit in globalVars.Settings.HistoryCallParks"
+                        ng-if="::!globalVars.IsSLTPhone">
+                        <a href="" ng-click="appMainCtrl.parkCall(orbit)"><i class="fa fa-car fa-fw"></i> {{orbit}}</a>
+                    </li>
+                    <li role="menuitem"><a href="" ng-click="appMainCtrl.parkCall(-1)" ng-if="::!globalVars.IsSLTPhone"><i
+                        class="fa fa-car fa-fw"></i>
+                        {{::getLocalPhrase('Park')}}...</a></li>
+                </ul>
+
+            </div>
+        </div>
+
+      </section>
+</div>

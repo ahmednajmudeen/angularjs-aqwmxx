@@ -1,0 +1,233 @@
+<div class="container"
+     ng-controller="ChatSessionCtrl as chatSessionCtrl"
+     ng-show="!chatSessionCtrl.hideSession"
+     style="position: relative; width: 100%" ng-style="{height: chatCtrl.chatWindowHeight}">
+
+    <a href ng-click="chatSessionCtrl.back()" class="text-primary" ng-if="chatSessionCtrl.data.backAllowed"><i
+        class="fa fa-chevron-left"></i>
+        {{::getLocalPhrase('Button.Back')}}</a>
+
+    <div ng-if="chatSessionCtrl.data.isSMS">
+        <div class="pull-left">
+            <i class="fas fa-sms fa-3x"></i>
+        </div>
+        <div class="pull-left" style="margin-left: 0.5em">
+            <img class="pull-left img-rounded img-responsive"
+                 ng-if="chatSessionCtrl.data.photo"
+                 ng-src="{{chatSessionCtrl.data.photo}}"
+                 style="max-height: 32px; max-width: 32px">
+            <div class="pull-left" style="margin-left: 0.5em">
+                <span>{{chatSessionCtrl.data.firstName}} {{chatSessionCtrl.data.lastName}}</span>
+                <span ng-if="chatSessionCtrl.data.title"><br/>{{chatSessionCtrl.data.title}}</span>
+                <span ng-if="chatSessionCtrl.data.company"><br/>{{chatSessionCtrl.data.company}}</span>
+                <br/>
+            </div>
+            <div class="pull-left" style="margin-left: 2em">
+                <a ng-if="chatSessionCtrl.data.email"
+                   href="mailto:{{chatSessionCtrl.data.email}}" target="_top"><i
+                    class="fa fa-envelope"></i>{{chatSessionCtrl.data.email}}</a>
+
+                <a ng-href="" ng-click="chatSessionCtrl.callExternalNumber()" style="margin-left: 1em"><i
+                    class="fas fa-phone fa-idle-phone"></i>{{chatSessionCtrl.data.SMSnumber}}</a>
+
+                <a ng-href="" class="text-primary" style="margin-left: 1em"
+                   ng-if="!chatSessionCtrl.data.chatObj.contact" ng-click="chatSessionCtrl.addToContact()">
+                    <i class="fal fa-plus"></i>{{::getLocalPhrase('contact')}}
+                </a>
+            </div>
+        </div>
+
+    </div>
+    <div ng-if="!chatSessionCtrl.data.isGroup && !chatSessionCtrl.data.isSMS">
+        <img class="pull-left img-rounded img-responsive"
+             ng-src="{{chatSessionCtrl.data.user.photo}}"
+             style="max-height: 32px; max-width: 32px">
+        <div class="pull-left">
+            <span>{{chatSessionCtrl.data.userLabel}}</span>
+            <br/>
+            <a href ng-click="chatSessionCtrl.callUser()" style="margin-left:1em; margin-right:2em">
+                <i ng-class="chatSessionCtrl.data.user.cache.blfStatusIndicator"></i>
+            </a>
+            <a href ng-if="chatSessionCtrl.data.user.cache.canVideo"
+               ng-click="chatSessionCtrl.videoCallUser()">
+                <i class="fas fa-video fa-fw" ng-class="{'call-connected':userObj.cache.usingVideo}"></i>
+            </a>
+        </div>
+
+        <button class="btn btn-default btn-xs pull-right " ng-click="chatSessionCtrl.endChat()"><i
+            class="fa fa-times"></i> <span
+            class="hidden-xs">{{::getLocalPhrase('Button.EndChat')}}</span></button>
+    </div>
+
+    <div ng-if="chatSessionCtrl.data.isGroup && !chatSessionCtrl.data.isSMS">
+        <div ng-if="chatSessionCtrl.data.chatObj.group.IsBuddyList" class="text-primary">
+            <i class="fa fa-users"></i> <span>{{chatSessionCtrl.data.chatObj.label}}</span>
+        </div>
+
+        <div ng-if="!chatSessionCtrl.data.chatObj.group.IsBuddyList"
+             style="width: 100%; overflow: hidden;text-overflow: ellipsis;display: inline-block;">
+            <i class="fa fa-users"></i> <span>{{chatSessionCtrl.data.chatObj.label}}</span>
+
+            <button class="btn btn-default btn-xs pull-right " ng-if="chatSessionCtrl.data.leaveAllowed"
+                    ng-click="chatSessionCtrl.endChat()"><i
+                class="fa fa-times"></i> <span
+                class="hidden-xs">{{::getLocalPhrase('Leave')}}</span></button>
+        </div>
+
+    </div>
+
+    <div scroll-glue
+         style="padding: 0 0.5em; width:100%"
+         ng-style="{'height': chatSessionCtrl.chatSessionHeight +'px'}">
+        <div ng-if="chatSessionCtrl.data.viewingHistory"
+             ng-repeat="pastSession in chatSessionCtrl.data.chatObj.pastSessions">
+            <span style="margin-right: 1.5em">{{pastSession.sessionStart}}</span>
+            <a ng-href="" ng-click="chatSessionCtrl.fetchConversation(pastSession)">
+                <i ng-class="{'fal fa-folder': !pastSession.open, 'far fa-folder-open': pastSession.open}"></i>
+                {{::getLocalPhrase('Button.View')}}</a>
+            <a ng-href="" class="text-danger" ng-click="chatSessionCtrl.deleteConversation(pastSession)"><i
+                class="fa fa-remove"></i>
+                {{::getLocalPhrase('Button.Delete')}}</a>
+
+            <div ng-if="pastSession.open">
+
+                <div ng-repeat="pastMessage in pastSession.conversation">
+
+                    <div ng-if="::chatSessionCtrl.data.isGroup && pastMessage.user"
+                         ng-class="{'pull-right': pastMessage.sent}">
+                        <img class="pull-left img-rounded img-responsive"
+                             ng-src="{{pastMessage.user.photo}}"
+                             style="max-height: 16px">
+                        <span ng-if="pastMessage.sent">
+                            {{pastMessage.user.name}} ({{pastMessage.user.extension}})
+                        </span>
+                        <span ng-if="!pastMessage.sent">
+                            <a ng-href="" ng-click="chatSessionCtrl.showChatUserDetails(pastMessage.user.extension)">
+                                {{pastMessage.user.name}} ({{pastMessage.user.extension}})
+                            </a>
+                        </span>
+
+                    </div>
+
+                    <div ng-class="{'bubble bubble--alt': pastMessage.sent, 'bubble': !pastMessage.sent}">
+                        <span class="pull-left text-muted" compile-html="pastMessage.text"></span>
+                    </div>
+                    <div ng-if="pastMessage.messageStatusClass">
+                        <div class="clearfix"></div>
+                        <div class="pull-right">
+                            <i ng-class="pastMessage.messageStatusClass"></i> <span ng-if="pastMessage.messageErrorCode"
+                                                                                    ng-class="{'text-danger': pastMessage.messageErrorCode}">{{pastMessage.messageStatusText}}</span>
+                        </div>
+                    </div>
+
+                    <div ng-if="::chatSessionCtrl.data.isGroup" class="clearfix"></div>
+
+
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        <div
+            ng-if="chatSessionCtrl.data.chatObj.pastSessions && chatSessionCtrl.data.chatObj.pastSessions.length">
+            <a ng-click="chatSessionCtrl.data.viewingHistory = !chatSessionCtrl.data.viewingHistory">
+                <span class="small text-primary pull-right">
+                        <div ng-switch on="chatSessionCtrl.data.viewingHistory">
+                            <span ng-switch-when="true"><i class="fa fa-chevron-up"></i> {{::getLocalPhrase('Chat.HideEarlierMessages')}}</span>
+                            <span ng-switch-when="false"><i class="fa fa-chevron-left"></i> {{::getLocalPhrase('Chat.ViewEarlierMessages')}}</span>
+                        </div>
+                </span>
+            </a>
+        </div>
+        <div class="clearfix"></div>
+
+        <div ng-repeat="newMessage in chatSessionCtrl.data.chatObj.messages">
+            <div ng-if="::chatSessionCtrl.data.isGroup && !newMessage.sent && newMessage.user">
+                <img class="pull-left img-rounded img-responsive"
+                     ng-src="{{newMessage.user.photo}}"
+                     style="max-height: 16px">
+                <a ng-href="" ng-click="chatSessionCtrl.showChatUserDetails(newMessage.user.extension)">
+                    {{newMessage.user.name}} ({{newMessage.user.extension}})
+                </a>
+            </div>
+
+            <div ng-class="{'bubble bubble--alt': newMessage.sent, 'bubble': !newMessage.sent}">
+                <div class="pull-left" style="margin-left:1.0em" ng-switch on="newMessage.type">
+                    <div ng-switch-when="TEXT">
+                        <span compile-html="newMessage.text"></span>
+                    </div>
+                    <p ng-switch-when="CHAT_ENDED" class="text-danger">
+                        Conversation ended
+                    </p>
+                    <p ng-switch-when="LOGGED_IN" class="call-connected">
+                        Available for chat
+                    </p>
+                    <p ng-switch-when="LOGGED_OUT" class="text-warning">
+                        Not available for chat
+                    </p>
+                </div>
+            </div>
+
+            <div class="clearfix"></div>
+
+            <span class="small" ng-class="{'pull-right': newMessage.sent}">
+                {{newMessage.dateTime}} <i ng-if="newMessage.messageStatusClass"
+                                           ng-class="newMessage.messageStatusClass"></i>
+
+            </span>
+            <div ng-if="newMessage.messageStatusText">
+                <div class="clearfix"></div>
+                <span class="text-danger pull-right" ng-class="{'text-danger': newMessage.messageErrorCode}">{{newMessage.messageStatusText}}</span>
+            </div>
+        </div>
+        <div ng-if="chatSessionCtrl.data.chatDeleted" class="text-center">
+            <h4 class="text-danger">Group chat deleted</h4>
+        </div>
+
+        <h4 ng-if="chatSessionCtrl.data.reachedMaxSmsLimit" class="text-danger">
+            {{::getLocalPhrase('ReachedMaxSmsLimit')}}
+        </h4>
+        <h4 ng-if="chatSessionCtrl.data.isExpired" class="text-danger">
+            {{::getLocalPhrase('SMSLicenseExpired', [chatSessionCtrl.data.expires_date])}}
+        </h4>
+    </div>
+
+    <div id="idChatSendMessage" ng-if="chatSessionCtrl.data.allowSend"
+         style="z-index:1000; background-color: #d3d3d3; position:absolute; bottom: 0px;right:0px; height:80px; left: 0px">
+        <form ng-submit="chatSessionCtrl.sendMessage()">
+            <div class="row" style="margin-left: 0px; margin-right: 0px; margin-top: 10px">
+                <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+                    <textarea id='idMessageText' class="form-control" ng-model="chatSessionCtrl.data.messageText"
+                              ng-keypress="chatSessionCtrl.keyPressed($event)"
+                              style="resize:none; width:100%; height: 100%;"
+                              placeholder="{{::getLocalPhrase('Chat.TypeMessage')}}"
+                              ng-disabled="chatSessionCtrl.data.disableChat"></textarea>
+                </div>
+                <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                    <div class="row">
+                        <div class="col-xs-4 text-center">
+                            <a href=""
+                               uib-popover-template="'views/templates/emoji.tmpl.html'"
+                               popover-placement="top-right"
+                               popover-trigger="'click'"
+                               popover-append-to-body="true"
+                               ng-if="!globalVars.WindowsTooOld && chatSessionCtrl.data.CanChat">
+                                <i class="far fa-smile"></i>
+                            </a>
+                        </div>
+                        <div class="col-xs-4 text-center">
+                            <button class="btn btn-xs btn-primary" type="submit"
+                                    ng-if="chatSessionCtrl.data.CanChat"
+                                    ng-disabled="chatSessionCtrl.data.disableChat || chatSessionCtrl.data.messageText.length==0">
+                                <i class="far fa-paper-plane"></i>
+                            </button>
+                        </div>
+                        <div class="col-xs-4 text-center">
+                            <i ng-class="{'fa fa-keyboard-o animated flash alerting': chatSessionCtrl.data.typing}"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>

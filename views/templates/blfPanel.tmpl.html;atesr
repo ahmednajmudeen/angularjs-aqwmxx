@@ -1,0 +1,144 @@
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome-animation@1.1.1/css/font-awesome-animation.css">
+
+
+
+<div ng-switch="::$root.globalVars.Settings.AdvancedHomePage">
+    <div ng-switch-when="true">
+        <div class="pull-left" style="width:52px;">
+            <a ng-href="" ng-click="homeCtrl.goToEmployeeDetail(userObj.extension)">
+                <img class="img-responsive img-rounded"
+                     ng-class="userObj.cache.photoClass"
+                     ng-src="{{ userObj.photo }}"
+                     alt="" style="max-width: 50px; max-height: 50px;border-radius: 50%;margin-top: 6px;margin-left: 3px;/*! padding-right: 3px; *//*! margin-right: 2px; *//*! border-style: 1px solid; */"/>
+            </a>
+        </div>
+        <div class="pull-left home-right">
+            <div>
+                <div class="pull-left">
+                    <i ng-if="userObj.cache.isMobile" class="fa fa-mobile-phone"></i>
+                    <a href=""
+                       uib-popover-template="'views/templates/presenceDetails.tmpl.html'"
+                       popover-title=""
+                       popover-placement="right"
+                       popover-trigger="'focus mouseenter'"
+                       popover-append-to-body="false">
+                        <span class="pointer" ng-class="userObj.cache.presenceColor">
+                        <i ng-class="userObj.cache.presenceIcon"></i>
+                        </span>
+                        <span ng-class="userObj.cache.presenceColor">{{::userObj.name}}</span>
+                    </a>
+                </div>
+                <div class="pull-right">
+                    <rp-blf-communicate></rp-blf-communicate>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <span ng-if="userObj.cache.blfNote" class="blf-note"
+                  ng-class="{'inactive-text': userObj.cache.isInactive}">{{userObj.cache.blfNote}}</span>
+            <span ng-if="userObj.cache.lastActivityBlf"
+                  class="small inactive-text">{{userObj.cache.lastActivityBlf}}</span>
+        </div>
+    </div>
+    <div ng-switch-when="false">
+        <a ng-href="" ng-click="homeCtrl.goToEmployeeDetail(userObj.extension)">
+            <div class="pull-left" style="width:52px;">
+                <img class="img-responsive img-rounded"
+                     ng-class="userObj.cache.photoClass"
+                     ng-src="{{ userObj.photo }}"
+                     alt="" style="max-width: 50px; max-height: 50px;border-radius: 50%;margin-top: 6px;margin-left: 3px;/*! padding-right: 3px; *//*! margin-right: 2px; *//*! border-style: 1px solid; */"/>
+            </div>
+        </a>
+        <div class="pull-left home-right">
+            <div> <!-- 1st row-->
+                <div>
+                    <i ng-if="userObj.cache.isMobile" class="fa fa-mobile-phone"></i>
+                    <a href=""
+                       uib-popover-template="'views/templates/presenceDetails.tmpl.html'"
+                       popover-title=""
+                       popover-placement="right-bottom"
+                       popover-trigger="'focus mouseenter'"
+                       popover-append-to-body="false">
+                        <span ng-class="userObj.cache.presenceColor">{{::userObj.name}}</span>
+                    </a>
+
+                    <div ng-if="::globalVars.Settings.AddExtension" class="pull-right"
+                         ng-class="userObj.cache.presenceColor">
+                        <span>
+                            <a href ng-click="callNumber(userObj, 'Internal', userObj.extension)">
+                                <span ng-if="globalVars.CLICK_TO_TRANSFER" class="text-warning "><i
+                                    class="fas fa-bullseye text-warning"></i>{{::userObj.extension }}</span>
+                                <span ng-if="!globalVars.CLICK_TO_TRANSFER">{{::userObj.extension }}</span>
+                            </a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="small"> <!-- 2nd row-->
+                <a ng-class="userObj.cache.presenceColor" ng-click="homeCtrl.goToEmployeeDetail(userObj.extension)">
+                    <i ng-class="userObj.cache.presenceIcon"></i> {{userObj.cache.presenceLabel}}
+                </a>
+            </div>
+            <div class="clearfix"></div>
+            <div> <!-- 3rd row-->
+			
+			<div ng-class="getBLFStatusColor(userObj.presence.forwarding.mode)">
+               
+                <rp-blf-communicate>
+				
+				
+				
+				</rp-blf-communicate>
+			
+               
+            </div>
+			
+			
+			
+			
+			
+        </div>
+		
+		
+	
+        <span ng-if="userObj.cache.blfNote" class="blf-note"
+              ng-class="{'inactive-text': !userObj.cache.isActive}">{{userObj.cache.blfNote}}</span>
+        <span ng-if="userObj.cache.lastActivityBlf"
+              class="small inactive-text">{{userObj.cache.lastActivityBlf}}</span>
+    </div>
+	
+	
+			
+						<span ng-class="getBLFStatusColor(userObj.presence.forwarding.mode)" 
+							ng-switch on="userObj.presence.forwarding.mode" style="font-size: 11px;font-stretch: ultra-condensed;font-weight: bold;/*! text-indent: 57px; */float: left;padding-left: 5px;">
+
+			
+								<span ng-switch-when="DoNotDisturb">	<i class="fas fa-user-slash text-danger "style="font-size: 13px;">  </i>  {{::getLocalPhrase('Forward.DoNotDisturb')}}</span>
+								<span ng-switch-when="Dnd">	<i class="fas fa-user-slash text-danger "style="font-size: 13px;">  </i>  {{::getLocalPhrase('Forward.DoNotDisturb')}}</span>
+								<span ng-switch-when="Forward">	<i class="fas fa-arrow-alt-circle-right faa-horizontal text-primary " style="font-size: 12px;"> - </i> {{::getLocalPhrase('DeviceState.ForwardImmediate')}}</span>
+								<span ng-switch-when="ForwardImmediate">	<i class="fas fa-arrow-alt-circle-right faa-horizontal text-primary " style="font-size: 12px;"> - </i> {{::getLocalPhrase('DeviceState.ForwardImmediate')}}</span>
+								<span ng-switch-when="ForwardBothRinging">{{::getLocalPhrase('DeviceState.ForwardImmediate')}}</span>
+								<span ng-switch-when="Busy">{{::getLocalPhrase('DeviceState.Busy')}}</span>
+								
+								
+								
+								<span ng-switch-when="Active"><i class=" fas fa-phone-rotary faa-ring text-success" style="font-size: 14px;">Busy |</i>{{::getLocalPhrase('DeviceState.Busy')}}</span>
+								
+<span ng-switch-when="Offline" style="color: #8e2222;">  
+					 <i class="fas fa-times-circle  text-danger " style="font-size: 14px;/*! font-family: helvetica; */"> </i>  PHONE OFFLINE,check MLC application</span>
+
+								
+					 
+                    <span ng-switch-default="" style="color: #448bca;"> 
+					<i class="fas fa-check-circle text-success " style="font-size: 13px;"> ONLINE | </i>
+					{{::getLocalPhrase('DeviceState.Idle')}}
+					
+					</span>
+						</span>    <div ng-if="userObj.CurrentCall" class="pull-left" style="padding-left: 5px">
+                <i ng-class="{'fa fa-arrow-alt-circle-right text-primary faa-passing fa-inbound-call': userObj.CurrentCall.IsInbound, 'fa fa-arrow-alt-circle-left fa-outbound-call': !userObj.CurrentCall.IsInbound}"></i>
+               
+				<span ng-if="userObj.CurrentCall.displayCallerID"> {{userObj.CurrentCall.displayCallerID}}</span>
+            </div>
+	
+</div>   

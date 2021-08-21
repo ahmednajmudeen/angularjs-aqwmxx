@@ -1,0 +1,18 @@
+<div class="pull-left text-center" style="width:2em">
+    <a ng-href ng-click="callNumbers()" ng-class="contact.cache.blfStatusIndicator"></a>
+</div>
+<div class="pull-left  text-center" style="width:2em">
+    <a ng-if="enableEmailSend && contact.Email" href='mailto:{{contact.Email}}' target='_top'><span
+            class="fa fa-envelope fa-fw"></span></a>
+    <span ng-if="!(enableEmailSend && contact.Email)" class="fa fa-fw"></span>
+</div>
+<div class="pull-left  text-center" style="width:2em">
+    <a ui-sref="app.newChat({chatParm: contact.extension})" ng-if="contact.CanChat">
+        <span class="fa fa-comment fa-fw"></span>
+    </a>
+</div>
+<div class="pull-left  text-center" style="width:2em" ng-if="contact.cache.canVideo">
+    <a href ng-click="makeVideoCall()">
+        <span class="fas fa-video fa-fw" ng-class="{'call-connected':contact.cache.usingVideo}"></span>
+    </a>
+</div>

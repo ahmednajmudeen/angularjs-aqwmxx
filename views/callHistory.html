@@ -1,0 +1,22 @@
+<h5>{{::getLocalPhrase('Label.CallHistory')}}</h5>
+
+<div style="margin-top: 10px; margin-bottom: 10px;">
+    <button ng-disabled="data.deletingHistory" type="button" ng-csv="getArray()" csv-header="getExportColumns()"
+            filename="{{data.csvFile}}"
+            field-separator="," lazy-load="true"
+            class="btn btn-default"><span class="fas fa-file-excel fa-lg"></span> {{::getLocalPhrase('Button.Export')}}
+    </button>
+    <button type="button" ng-click="deleteSelected()" class="btn btn-danger"
+            ng-if="data.selectedRowsCount">
+        <span ng-if="!data.deletingHistory"><span class="fas fa-eraser fa-lg"></span> {{::getLocalPhrase('Button.DeleteSelected')}} ({{data.selectedRowsCount}})</span>
+        <span ng-if="data.deletingHistory" class="fa fa-refresh fa-spin"></span>
+    </button>
+    <button type="button" class="btn btn-default" ng-click="clearState()"
+            ng-if="globalVars.Settings.CallHistoryGridState">{{::getLocalPhrase('Button.RestoreTableLayout')}}
+    </button>
+</div>
+<div>
+    <div id="gridCallHistory" ui-grid="gridOptions1" ng-style="{'height':$root.CallHistoryHeight, width:'100%'}"
+         ui-grid-resize-columns ui-grid-move-columns ui-grid-save-state ui-grid-selection></div>
+</div>
+
