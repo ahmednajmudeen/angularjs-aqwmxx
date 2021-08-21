@@ -1,0 +1,101 @@
+<style>
+    body {
+        /*        font-size: 12px;*/
+    }
+
+    a {
+        color: #337ab7;
+    }
+
+    .gridButton {
+        color: #333;
+    }
+
+    .ac_returned {
+        color: green !important;
+    }
+
+    .ac_old {
+        color: red !important;
+    }
+
+    .ac_yesterday {
+        background-color: yellow !important;
+    }
+
+    .ac_today {
+    }
+</style>
+<div class="container-fluid">
+    <div ng-if="!abandonedCallsCtrl.hide_for_ie">
+        <span ng-if="!abandonedCallsCtrl.readyToDisplay"> <i class="fa fa-refresh fa-spin"></i> Initializing</span>
+
+        <div ng-if="abandonedCallsCtrl.readyToDisplay">
+
+            <h3 ng-if="abandonedCallsCtrl.abandonedCalls.length===0" class="text-center">{{::getPhrase('NoCallbacksToMake')}}</h3>
+
+            <div class="container-fluid">
+                <div ng-repeat="ac in abandonedCallsCtrl.abandonedCalls"
+                     style="margin-top:1em; background: rgb(242, 242, 242); border-radius: 10px; padding: 0.5em">
+                    <div class="row" ng-class="ac.acStatusClass">
+                        <div class="col-xs-6">
+                            Time: {{ac.arrivalTime}}
+                        </div>
+                        <div class="col-xs-6">
+                            Status <i class="fas fa-pencil text-primary pointer" ng-click="abandonedCallsCtrl.edit(ac)"
+                                      tooltip-placement="left-top" uib-tooltip="Edit callback status"></i>:
+                            {{ac.QueueName}} (<span>{{ac.finalStatus}}</span>) - <i
+                            ng-class="ac.callbackStatusImage"></i>{{ac.callbackStatus}}
+                            <span class="pull-right"><i class="fas fa-times text-danger"
+                                                        ng-click="abandonedCallsCtrl.delete(ac)"
+                                                        tooltip-placement="left-top" uib-tooltip="Remove from list"></i></span>
+                        </div>
+                    </div>
+                    <div class="row" ng-class="ac.acStatusClass">
+                        <div class="col-xs-6">
+                            Number: <a ng-href="" ng-click="abandonedCallsCtrl.dial(ac)"><i
+                            class="fas fa-phone fa-idle-phone fa-fw"></i>{{ac.CallerID}}</a>
+                        </div>
+                        <div class="col-xs-6">
+                            Wait time: <i class="far fa-stopwatch"></i> {{ac.duration | shortDuration}}
+                        </div>
+                    </div>
+                    <div class="row" ng-class="ac.acStatusClass">
+                        <div class="col-xs-12">
+                            Comment: <p style="margin: 0px 0.5em">{{ac.comment}}</p>
+                        </div>
+                    </div>
+                    <a href="" ng-click="abandonedCallsCtrl.toggleCollapsed(ac)" ng-init="ac.isCollapsed=false">
+                        More
+                        <i ng-class="{'fa fa-chevron-down':!ac.isCollapsed, 'fa fa-chevron-up' : ac.isCollapsed}"></i>
+                    </a>
+                    <div uib-collapse="!ac.isCollapsed">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th>Date/time</th>
+                                <th>Status</th>
+                                <th>Extension</th>
+                                <th>Name</th>
+                                <th>Comment</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="row in abandonedCallsCtrl.callDetails">
+                                <td>{{row.stateTime}}</td>
+                                <td>{{row.State}}</td>
+                                <td>{{row.Extension}}</td>
+                                <td>{{row.Name}}</td>
+                                <td>{{row.comment}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="clearfix"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,22 @@
+<div class="modal-header">
+    <h5 class="modal-title">
+                <span>{{::getLocalPhrase('About.Title')}}</span>
+    </h5>
+</div>
+
+<div class="modal-body text-center">
+    <div>
+        <img src="resources/images/nec-logo.png" ng-init="a=0" ng-click="a=a+1"/> <br/><br/><br/>
+    </div>
+    <span style="color: #1414a0; font-size:24px" ng-init="b=0" ng-click="b=b+1">{{::getLocalPhrase('Product.Name')}}</span> <br/>
+
+    <span>{{data.productVersion}}</span> <br/><br/><br/>
+
+    <span ng-bind-html="::getLocalPhrase('Product.Copyright')"></span>
+</div>
+
+<div class="modal-footer">
+    <div class="text-center">
+        <button ng-click="okClicked()" class="btn btn-primary">{{::getLocalPhrase('Button.Ok')}}</button>
+    </div>
+</div>

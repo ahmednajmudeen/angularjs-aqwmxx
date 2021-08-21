@@ -1,0 +1,18 @@
+<div class="modal-header">
+    <h5 class="modal-title">
+        <div class="row">
+            <div class="col-xs-10">
+                <span>{{::getLocalPhrase('Confirm.BusyExtension', [data.extension])}}</span>
+            </div>
+        </div>
+    </h5>
+</div>
+<div class="modal-body">
+    <p>{{::getLocalPhrase('Confirm.Body.Para1', [data.extension])}}</p>
+    <p>{{::getLocalPhrase('Confirm.Body.Para2')}}</p>
+    <p>{{::getLocalPhrase('Confirm.Body.Para3')}}</p>
+</div>
+<div class="modal-footer">
+    <button ng-click="overrideClicked()" class="btn btn-primary">{{::getLocalPhrase('Button.TakeControl')}}</button>
+    <button ng-click="closeDialog()" class="btn btn-default">{{::getLocalPhrase('Button.Continue')}}</button>
+</div>

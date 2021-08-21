@@ -1,0 +1,49 @@
+<style>
+    .modal-dialog {
+        overflow-y: initial !important;
+    }
+
+    .modal-body {
+        overflow-y: auto;
+        background-color: #f3f3f3;
+    }
+</style>
+<div class="modal-header">
+    <h5 class="modal-title">
+        <span>Outgoing Video Call</span>
+    </h5>
+</div>
+<div class="modal-body">
+    <div class="panel-body">
+        <div class="row" ng-repeat="userObj in outgoingVideoCtrl.outgoingCalls">
+            <div class="col-xs-12">
+                <div class="text-center">
+                    <span class="fas fa-video text-primary animated flash ringing"></span> <span
+                    style="font-weight: 500; ">{{userObj.name}}</span>
+                </div>
+                <div class="text-center">
+                    <div class="col-xs-offset-3 col-xs-6 text-center">
+                        <img ng-src="{{userObj.photo}}" class="img-rounded">
+                    </div>
+                </div>
+                <div class="text-center">
+                    <h4>{{userObj.number}}</h4>
+                </div>
+            </div>
+
+            <div class="col-xs-12" style="padding-top: 10px">
+                <div class="btn-group btn-group-justified">
+
+                    <div class="btn-group" role="group">
+                        <button ng-click="outgoingVideoCtrl.endCall(userObj.extension)" class="btn btn-default">
+                            <span class="text-danger">End Call</span>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>

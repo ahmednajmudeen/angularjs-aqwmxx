@@ -1,0 +1,78 @@
+<style>
+    .modal-dialog {
+        overflow-y: initial !important;
+    }
+
+    .modal-body {
+        overflow-y: auto;
+        background-color: #f3f3f3;
+    }
+</style>
+<div class="modal-header">
+    <h5 class="modal-title">
+        <div class="row">
+            <div class="col-xs-10">
+                <span>{{::getLocalPhrase('Button.AddContact')}}</span>
+            </div>
+        </div>
+    </h5>
+</div>
+<div class="modal-body">
+    <form novalidate>
+        <formly-form model="vm.model"
+                     fields="vm.fields"
+                     form="vm.form">
+        </formly-form>
+    </form>
+    <div>
+        <label class="control-label ">
+            Choose type of contact to add
+        </label>
+
+        <div class="radio-group">
+            <div class="radio">
+                <label class="ng-binding">
+                    <input type="radio" ng-model="vm.model.contactType" value="Internal">
+                    {{::getLocalPhrase('Company')}}
+                </label>
+
+                <div class="form-group ng-scope" ng-class="{'has-error': vm.model.errors.extension}"
+                     ng-if="vm.model.contactType==='Internal'">
+                    <div>
+                        <br/>
+                        <label for="idExtension" class="control-label">
+                            {{::getLocalPhrase('Name.Ext')}}*
+                        </label>
+                        <input class="form-control" ng-model="vm.model.extension" id="idExtension" name="idExtension"
+                               placeholder="Enter extension for User" ng-change="vm.validateExtension()"
+                               ng-blur="vm.validateExtension()" type="text">
+                        <span class="validation">{{vm.model.errors.extension}}</span>
+                    </div>
+                </div>
+
+            </div>
+            <div class="radio">
+                <label class="ng-binding">
+                    <input type="radio" ng-model="vm.model.contactType" value="External">
+                    {{::getLocalPhrase('Business')}}
+                </label>
+            </div>
+            <div class="radio">
+                <label class="ng-binding">
+                    <input type="radio" ng-model="vm.model.contactType" value="Personal">
+                    {{::getLocalPhrase('Personal')}}
+                </label>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="pull-right">
+        <button ng-click="vm.closeDialog()" class="btn btn-default">{{::getLocalPhrase('Cancel')}}
+        </button>
+        <button ng-click="vm.saveDialog()" class="btn btn-primary"
+                ng-disabled="vm.model.contactType === 'Internal' && vm.model.errors.extension">
+            {{::getLocalPhrase('Button.Ok')}}
+        </button>
+    </div>
+</div>

@@ -1,0 +1,32 @@
+<style>
+    .modal-dialog {
+        overflow-y: initial !important;
+    }
+
+    .modal-body {
+        overflow-y: auto;
+        background-color: #f3f3f3;
+    }
+</style>
+<div class="modal-header">
+    <h5 class="modal-title">
+        <span>{{::getLocalPhrase('ShowRecentCalls')}}</span>
+    </h5>
+</div>
+<div class="modal-body">
+    <div class="panel-body">
+        <div>
+            <div ui-grid="showRecentCallsCtrl.gridOptions1"
+                 ui-grid-resize-columns ui-grid-save-state ui-grid-edit style="height: 65vh;">
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="modal-footer">
+    <div class="pull-right">
+        <button ng-click="showRecentCallsCtrl.closeDialog()" class="btn btn-default">
+            {{::getLocalPhrase('Button.Close')}}
+        </button>
+    </div>
+</div>

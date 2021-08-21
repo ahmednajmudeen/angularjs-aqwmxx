@@ -1,0 +1,32 @@
+<style>
+    .modal-dialog {
+        overflow-y: initial !important;
+    }
+
+    .modal-body {
+        overflow-y: auto;
+        background-color: #f3f3f3;
+    }
+</style>
+<div class="modal-header">
+    <h5 class="modal-title">
+        <span>{{::getLocalPhrase('SetNightMode')}}</span>
+    </h5>
+</div>
+<div class="modal-body" ng-style="{height: modalHeight + 'px'}">
+    <div class="container-fluid">
+        <div class="row">
+            <set-night-mode data="data"></set-night-mode>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="pull-right">
+        <button ng-click="closeDialog()" class="btn btn-default">
+            {{::getLocalPhrase('Cancel')}}
+        </button>
+        <button ng-click="saveDialog()" class="btn btn-primary">
+            {{::getLocalPhrase('Button.Save')}}
+        </button>
+    </div>
+</div>

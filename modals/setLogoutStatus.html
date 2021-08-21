@@ -1,0 +1,55 @@
+<style>
+    .modal-dialog {
+        overflow-y: initial !important;
+    }
+
+    .modal-body {
+        overflow-y: auto;
+        background-color: #f3f3f3;
+    }
+</style>
+<div class="modal-header">
+    <h5 class="modal-title">
+        <span>{{::getLocalPhrase('SetLogoutStatus.Title')}}</span>
+    </h5>
+</div>
+<div class="modal-body" ng-style="{height: modalHeight + 'px'}">
+    <div class="container-fluid">
+        <p ng-bind-html="::getLocalPhrase('SetLogoutStatus.Desc')"></p>
+
+        <div class="radio">
+            <label>
+                <input type="radio" ng-model="data.option" value="NO_UPDATE"/>
+                <span ng-bind-html="::getLocalPhrase('SetLogoutStatus.DoNotUpdate')"></span>
+            </label>
+        </div>
+        <div class="radio">
+            <label>
+                <input type="radio" ng-model="data.option" value="UPDATE"/>
+                <span ng-bind-html="::getLocalPhrase('SetLogoutStatus.Update')"></span>
+            </label>
+            <select style="margin-left: 1em" ng-model="logoutStatus"
+                    ng-options="statusOption.label group by statusOption.group for statusOption in statusOptions"
+                    ng-disabled="data.option !== 'UPDATE'">
+            </select>
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <div class="pull-left" ng-if="data.option==='NO_UPDATE'">
+        <a href ng-click="data.doNotShowAgain = !data.doNotShowAgain">
+            <i class="fa fa-lg text-primary"
+               ng-class="{'fa fa-check-square': data.doNotShowAgain, 'fa fa-square-o': !data.doNotShowAgain}"></i>
+            {{::getLocalPhrase('LeaveAsInOfficeNeverAskAgain')}}
+        </a>
+    </div>
+    <div class="pull-right">
+        <button ng-click="closeDialog()" class="btn btn-default">
+            {{::getLocalPhrase('Cancel')}}
+        </button>
+        <button ng-click="saveDialog()" class="btn btn-primary">
+            {{::getLocalPhrase('Menu.SignOut')}}
+        </button>
+    </div>
+</div>

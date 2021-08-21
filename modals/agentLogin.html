@@ -1,0 +1,40 @@
+<style>
+    .modal-dialog {
+        overflow-y: initial !important;
+    }
+
+    .modal-body {
+        overflow-y: auto;
+        background-color: #f3f3f3;
+    }
+</style>
+<div class="modal-header">
+    <h5 class="modal-title">
+        <div class="row">
+            <div class="col-xs-10">
+                <span>{{agentLoginCtrl.model.pageTitle}}</span>
+            </div>
+        </div>
+    </h5>
+</div>
+<div class="modal-body">
+    <form novalidate>
+        <div uib-alert type="alert-danger" ng-if="agentLoginCtrl.errorMsg">{{agentLoginCtrl.errorMsg}}</div>
+        <formly-form model="agentLoginCtrl.model"
+                     fields="agentLoginCtrl.fields"
+                     form="agentLoginCtrl.form">
+        </formly-form>
+    </form>
+<!--    <pre>{{agentLoginCtrl.snrObj | json}}</pre>
+    <pre>{{agentLoginCtrl.model | json}}</pre>
+    <pre>{{agentLoginCtrl.form | json}}</pre>-->
+</div>
+<div class="modal-footer">
+    <div class="pull-right">
+        <button ng-click="agentLoginCtrl.closeDialog()" class="btn btn-default">{{::getLocalPhrase('Cancel')}}
+        </button>
+        <button ng-click="agentLoginCtrl.saveDialog()" class="btn btn-primary"
+                ng-disabled="agentLoginCtrl.form.$invalid || agentLoginCtrl.form.$error.required">{{::getLocalPhrase('AgentLogin')}}
+        </button>
+    </div>
+</div>

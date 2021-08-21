@@ -1,0 +1,149 @@
+<style>
+    .inviteeBox {
+        width: 275px;
+    }
+
+    .photo {
+        max-width: 42px;
+        margin-right: 3px;
+    }
+</style>
+<script type="text/ng-template" id="inviteeChoiceTemplate.html">
+    <a class="inviteeBox">
+        <div>
+            <div class="pull-left text-center photo">
+                <img ng-if="match.model.imageURL" ng-src="{{match.model.imageURL}}" class="img-responsive img-rounded">
+            </div>
+            <div>
+                <div>
+                    <span ng-bind-html="match.model.name"></span>
+                </div>
+                <div>
+                    <span ng-bind-html="match.model.extension"></span>
+                </div>
+            </div>
+        </div>
+    </a>
+</script>
+<style>
+    .modal-dialog {
+        overflow-y: initial !important;
+    }
+
+    .modal-body {
+        overflow-y: auto;
+        background-color: #f3f3f3;
+    }
+</style>
+<div class="modal-header">
+    <h5 class="modal-title">
+        <div class="row">
+            <div class="col-xs-10">
+                <span>{{::getLocalPhrase('VideoConf')}}</span>
+            </div>
+        </div>
+    </h5>
+</div>
+<div class="modal-body" ng-style="{height: videoConferenceCtrl.modalHeight + 'px'}">
+    <h5>{{::getLocalPhrase('VideoType')}}</h5>
+    <div class="btn-group btn-group-justified">
+        <label class="btn btn-primary" ng-model="videoConferenceCtrl.type" uib-btn-radio="'Chat'">Video chat</label>
+        <label class="btn btn-primary" ng-model="videoConferenceCtrl.type" uib-btn-radio="'WebConf'">UC Web
+            Conference</label>
+    </div>
+    <h5 ng-if="videoConferenceCtrl.type==='WebConf'">{{::getLocalPhrase('MeetingSignIn')}}
+        <a href="" ng-click="videoConferenceCtrl.isCollapsed = !videoConferenceCtrl.isCollapsed">
+            <i ng-class="{'fa fa-chevron-right':videoConferenceCtrl.isCollapsed, 'fa fa-chevron-down' : !videoConferenceCtrl.isCollapsed}"></i>
+        </a>
+    </h5>
+    <div class="container-fluid" ng-if="videoConferenceCtrl.type==='WebConf'"
+         uib-collapse="videoConferenceCtrl.isCollapsed">
+        <div class="row">
+            <div class="col-md-6">
+                <label for="WebConfUserID" class="control-label">{{::getLocalPhrase('MeetingUserID')}} *</label>
+                <input id="WebConfUserID" type="text" class="form-control" ng-model="videoConferenceCtrl.webConfUserID">
+                <span class="text-danger" ng-if="videoConferenceCtrl.webConfUserIDError">{{videoConferenceCtrl.webConfUserIDError}}</span>
+            </div>
+            <div class="col-md-6">
+                <label for="WebConfPassword" class="control-label">{{::getLocalPhrase('MeetingPassword')}} *</label>
+                <input id="WebConfPassword" type="password" class="form-control"
+                       ng-model="videoConferenceCtrl.webConfPassword">
+                <span class="text-danger" ng-if="videoConferenceCtrl.webConfPasswordError">{{videoConferenceCtrl.webConfPasswordError}}</span>
+            </div>
+            <div class="col-xs-12">
+                <a href
+                   ng-click="videoConferenceCtrl.webConfRememberSettings = !videoConferenceCtrl.webConfRememberSettings">
+                    <i class="fa fa-lg text-primary"
+                       ng-class="{'fa fa-check-square': videoConferenceCtrl.webConfRememberSettings, 'fa fa-square-o': !videoConferenceCtrl.webConfRememberSettings}"></i>
+                    {{::getLocalPhrase('Remember')}}
+                </a>
+            </div>
+        </div>
+    </div>
+    <h5>{{::getLocalPhrase('InvitePeople')}}</h5>
+    <div class="container-fluid">
+        <div class="row">
+            <div ng-repeat="invitee in videoConferenceCtrl.invitees" class="col-md-6 col-lg-4 invitee-panel">
+                <div ng-if="invitee.userObj">
+                    <div class="pull-left">
+                        <img class="img-responsive invitee-photo"
+                             ng-class="invitee.userObj.cache.photoClass"
+                             ng-src="{{ invitee.userObj.photo }}"
+                             alt=""/>
+                    </div>
+                    <div class="pull-left invitee-right">
+                        <div class="pull-left">
+                            {{invitee.userObj.name}}<br/>
+                            <span ng-class="invitee.userObj.cache.presenceColor">
+                            <i ng-class="presenceStatusIcon(invitee.userObj.presence.status)"></i>
+                            {{presenceStatusLabel(invitee.userObj.presence.status)}}
+                        </span>
+                        </div>
+                        <div class="pull-right">
+                            {{invitee.userObj.extension}}
+                            <a ng-ref=""
+                               ng-click="videoConferenceCtrl.uninvite(invitee)"><i
+                                class="fa fa-times text-danger"></i> </a>
+                        </div>
+                    </div>
+                </div>
+                <div ng-if="!invitee.userObj">
+                    <div class="pull-left" style="width:95%">
+                        <input
+                            typeahead-editable="false"
+                            style="width:100%"
+                            ng-focus="videoConferenceCtrl.inviteeChoiceOnFocus(invitee)"
+                            ng-model="videoConferenceCtrl.selectedInvitee"
+                            placeholder="{{::getLocalPhrase('BuddyList.AddBuddyPlaceHolder')}}"
+                            typeahead-min-length="0"
+                            typeahead-template-url="inviteeChoiceTemplate.html"
+                            typeahead-on-select="videoConferenceCtrl.inviteeSelected(invitee, $item)"
+                            uib-typeahead="inviteeUserObj as inviteeUserObj.label for inviteeUserObj in videoConferenceCtrl.inviteeChoices | filter:{label:$viewValue} | limitTo:10"
+                        />
+                    </div>
+                    <div class="pull-left" style="padding-left:2px">
+                        <a ng-ref=""
+                           ng-click="videoConferenceCtrl.uninvite(invitee)"><i
+                            class="fa fa-times text-danger"></i> </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4 text-center vcenter" style="height: 80px; padding-top:12px"
+                 ng-if="videoConferenceCtrl.invitees.length < videoConferenceCtrl.maxInvitees">
+                <a ng-href="" ng-click="videoConferenceCtrl.invite()" class="text-info">
+                    <i class="fa fa-plus-square-o fa-2x"></i><br/>
+                    <span class="small">{{::getLocalPhrase('Invite')}}</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="pull-right">
+        <button ng-click="videoConferenceCtrl.close()" class="btn btn-default">{{::getLocalPhrase('Cancel')}}</button>
+        <button ng-click="videoConferenceCtrl.start()" class="btn btn-primary"
+                ng-disabled="!videoConferenceCtrl.invitees.length">{{::getLocalPhrase('Start')}}
+        </button>
+    </div>
+</div>

@@ -1,0 +1,25 @@
+<div class="modal-header">
+    <h5 class="modal-title">
+        <div class="row">
+            <div class="col-xs-10">
+                <span>{{::getLocalPhrase('MobileDevice.Title')}}</span>
+            </div>
+        </div>
+    </h5>
+</div>
+<div class="modal-body">
+    <p>{{::getLocalPhrase('MobileDevice.Header')}}</p>
+
+    <rp-mobile-call-processing data="data"></rp-mobile-call-processing>
+
+</div>
+<div class="modal-footer">
+    <div class="row">
+        <div class="col-xs-8 text-left" style="margin-left: 0px;padding-left: 5px">
+            <p class="text-justify" ng-bind-html="::getLocalPhrase('MobileDevice.UpdateLater')"></p>
+        </div>
+        <div class="col-xs-4 text-right">
+            <button ng-click="closeDialog()" class="btn btn-primary">{{::getLocalPhrase('Button.Continue')}}</button>
+        </div>
+    </div>
+</div>

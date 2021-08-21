@@ -1,0 +1,44 @@
+<style>
+    .modal-dialog {
+        overflow-y: initial !important;
+    }
+
+    .modal-body {
+        overflow-y: auto;
+        background-color: #f3f3f3;
+    }
+</style>
+<div class="modal-header">
+    <h5 class="modal-title">
+        <span>{{::getLocalPhrase('WebConferenceWarning')}}</span>
+    </h5>
+</div>
+<div class="modal-body">
+    <div class="container-fluid">
+        <p>
+            Starting this kind of meeting will work only if you are able to open and login to the UC Web Conference
+            application. If
+            you have never logged into this application, or are not sure then it is recommended that you verify this
+            before proceeding.
+        </p>
+        <a href="{{$root.globalVars.SwitchURL}}uc/" target="_blank">Launch UC Web Conference</a>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <div class="pull-left">
+        <a href ng-click="webConfWarningCtrl.doNotShowAgain = !webConfWarningCtrl.doNotShowAgain">
+            <i class="fa fa-lg text-primary"
+               ng-class="{'fa fa-check-square': webConfWarningCtrl.doNotShowAgain, 'fa fa-square-o': !webConfWarningCtrl.doNotShowAgain}"></i>
+            {{::getLocalPhrase('DoNotShowAgain')}}
+        </a>
+    </div>
+    <div class="pull-right">
+        <button ng-click="webConfWarningCtrl.close()" class="btn btn-default">
+            {{::getLocalPhrase('Cancel')}}
+        </button>
+        <button ng-click="webConfWarningCtrl.start()" class="btn btn-primary">
+            {{::getLocalPhrase('Start')}}
+        </button>
+    </div>
+</div>

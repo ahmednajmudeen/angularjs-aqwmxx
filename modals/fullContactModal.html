@@ -1,0 +1,119 @@
+<style>
+    .modal-dialog {
+        overflow-y: initial !important;
+    }
+
+    .modal-body {
+        overflow-y: auto;
+        background-color: #f3f3f3;
+    }
+
+    hr {
+        margin-top: 5px;
+        margin-bottom: 10px;
+    }
+
+    .row {
+        margin-bottom: 1em;
+    }
+</style>
+<div class="modal-header">
+    <h5 class="modal-title">
+        <div class="row">
+            <div class="col-xs-10">
+                <span>{{::fullContactCtrl.title}}</span>
+            </div>
+            <div class="col-xs-2 text-right">
+                <a href="" ng-click="fullContactCtrl.closeDialog()">
+                    <span style="color:black" class="fa fa-times text-regular"></span></a>
+            </div>
+
+        </div>
+    </h5>
+</div>
+<div class="modal-body">
+    <div>
+        <img class="img-responsive pull-left" ng-src="{{fullContactCtrl.contact.photo}}"
+             ng-show="fullContactCtrl.contact.photo"
+             style="height: 64px; border-radius: 32px">
+        <a class="pull-right" ng-href
+           ng-if="fullContactCtrl.canEdit"
+           ng-click="fullContactCtrl.editContact()">
+            <i class="fa fa-pencil-alt"></i>
+        </a>
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="row" style="padding-top:1em">
+        <div class="col-xs-6 col-sm-5 col-md-4">
+            <b>{{::getLocalPhrase('Column.Name')}}</b>
+        </div>
+        <div class="col-xs-6 col-sm-7 col-md-8">
+            {{fullContactCtrl.contact.name}}
+            <span ng-if="fullContactCtrl.contact.source.Title"><br>{{fullContactCtrl.contact.source.Title}}</span>
+            <span ng-if="fullContactCtrl.contact.source.Company"><br>{{fullContactCtrl.contact.source.Company}}</span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-6 col-sm-5 col-md-4">
+            <b>{{::getLocalPhrase('Email')}}</b>
+        </div>
+        <div class="col-xs-6 col-sm-7 col-md-8">
+            <a ng-if="fullContactCtrl.contact.email" href="mailto:{{fullContactCtrl.contact.email}}" target="_top">{{fullContactCtrl.contact.email}}</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-6 col-sm-5 col-md-4">
+            <b>{{::getLocalPhrase('Numbers')}}</b>
+        </div>
+        <div class="col-xs-6 col-sm-7 col-md-8">
+            <div ng-repeat="phoneNum in fullContactCtrl.contact.phones">
+                <a ng-href="" ng-click="fullContactCtrl.dial(fullContactCtrl.contact, phoneNum)">{{phoneNum.value}}<span
+                    ng-if="phoneNum.type"> ({{phoneNum.type}})</span></a><br/>
+            </div>
+        </div>
+    </div>
+    <div class="row" ng-if="fullContactCtrl.contact.addresses && fullContactCtrl.contact.addresses.length">
+        <div class="col-xs-6 col-sm-5 col-md-4">
+            <b>{{::getLocalPhrase('Addresses')}}</b>
+        </div>
+        <div class="col-xs-6 col-sm-7 col-md-8">
+            <div ng-repeat="address in fullContactCtrl.contact.addresses">
+                <span ng-if="address.type"><b>{{address.type}}</b></span><br/>
+                <a ng-href="https://www.google.com/maps/place/{{address.urlAddress}}" target="_blank">{{address.formatted}}</a><br/>
+            </div>
+            <br/>
+        </div>
+    </div>
+    <div class="row" ng-if="fullContactCtrl.contact.contactType === 'Internal'">
+        <div class="col-xs-6 col-sm-5 col-md-4">
+            <b>{{::getLocalPhrase('Contact.GeneralCategory')}}</b>
+        </div>
+        <div class="col-xs-6 col-sm-7 col-md-8">
+            <b ng-if="fullContactCtrl.contact.source.Department">{{::getLocalPhrase('Contact.Department')}}</b>
+            <span
+                ng-if="fullContactCtrl.contact.source.Department"><br/>{{fullContactCtrl.contact.source.Department}}</span>
+            <b ng-if="fullContactCtrl.contact.source.Location">{{::getLocalPhrase('Location')}}</b>
+            <span
+                ng-if="fullContactCtrl.contact.source.Location"><br/><a
+                ng-href="https://www.google.com/maps/place/{{fullContactCtrl.contact.source.Location}}" target="_blank">{{fullContactCtrl.contact.source.Location}}</a></span>
+            <b ng-if="fullContactCtrl.contact.source.SupervisorName || fullContactCtrl.contact.source.SupervisorNumber"><br/>{{::getLocalPhrase('Supervisor')}}</b>
+            <span ng-if="fullContactCtrl.contact.source.SupervisorName"><br/>{{fullContactCtrl.contact.source.SupervisorName}}</span>
+            <span ng-if="fullContactCtrl.contact.source.SupervisorNumber"><br/>{{fullContactCtrl.contact.source.SupervisorNumber}}</span>
+            <b ng-if="fullContactCtrl.contact.source.AssistantName || fullContactCtrl.contact.source.AssistantNumber"><br/>{{::getLocalPhrase('Assistant')}}</b>
+            <span ng-if="fullContactCtrl.contact.source.AssistantName"><br/>{{fullContactCtrl.contact.source.AssistantName}}</span>
+            <span ng-if="fullContactCtrl.contact.source.AssistantNumber"><br/>{{fullContactCtrl.contact.source.AssistantNumber}}</span>
+        </div>
+
+    </div>
+    <div class="row" ng-if="fullContactCtrl.contact.contactType === 'Internal'">
+        <div class="col-xs-6 col-sm-5 col-md-4">
+            <b>{{::getLocalPhrase('Notes')}}</b>
+        </div>
+        <div class="col-xs-6 col-sm-7 col-md-8">
+            {{fullContactCtrl.contact.source.Notes}}
+        </div>
+
+    </div>
+</div>
+

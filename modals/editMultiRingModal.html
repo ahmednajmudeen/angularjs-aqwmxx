@@ -1,0 +1,37 @@
+<style>
+    .modal-dialog {
+        overflow-y: initial !important;
+    }
+
+    .modal-body {
+        overflow-y: auto;
+        background-color: #f3f3f3;
+    }
+</style>
+<div class="modal-header">
+    <h5 class="modal-title">
+        <div class="row">
+            <div class="col-xs-10">
+                <span>{{EditMultiRingCtrl.model.pageTitle}}</span>
+            </div>
+        </div>
+    </h5>
+</div>
+<div class="modal-body">
+    <form novalidate>
+        <formly-form model="EditMultiRingCtrl.model"
+                     fields="EditMultiRingCtrl.fields"
+                     form="EditMultiRingCtrl.form">
+        </formly-form>
+    </form>
+<!--    <pre>{{EditMultiRingCtrl.snrObj | json}}</pre>
+    <pre>{{EditMultiRingCtrl.model | json}}</pre>
+    <pre>{{EditMultiRingCtrl.form | json}}</pre>-->
+</div>
+<div class="modal-footer">
+    <div class="pull-right">
+        <button ng-click="EditMultiRingCtrl.closeDialog()" class="btn btn-default">{{::getLocalPhrase('Cancel')}}
+        </button>
+        <button ng-click="EditMultiRingCtrl.saveDialog()" class="btn btn-primary" ng-disabled="EditMultiRingCtrl.form.$invalid">{{::getLocalPhrase('Button.Save')}}</button>
+    </div>
+</div>

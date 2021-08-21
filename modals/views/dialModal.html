@@ -1,0 +1,224 @@
+<style>
+    .contactBox {
+        width: 275px;
+    }
+
+    .photo {
+        width: 24px;
+        margin-right: 3px;
+    }
+</style>
+<script type="text/ng-template" id="dialContactTemplate.html">
+    <a class="contactBox">
+        <div>
+            <div class="pull-left text-center photo">
+                <img ng-if="match.model.imageURL" ng-src="{{match.model.imageURL}}" class="img-responsive img-rounded">
+            </div>
+            <div>
+                <div>
+                    <span ng-bind-html="match.model.name"></span>
+                    <span ng-if="!match.model.voicemail && !match.model.video && match.model.alternateNumber" class="pull-right text-right">
+                        {{match.model.alternateNumberType}}
+                    </span>
+                    <span ng-if="match.model.voicemail" class="pull-right text-right">
+                        Voicemail <span class="fa fa-caret-square-o-right"></span>
+                    </span>
+                    <span ng-if="match.model.video" class="pull-right text-right">
+                        Video <span class="fas fa-video"></span>
+                    </span>
+                </div>
+                <div>
+                    <span ng-bind-html="match.model.dial"></span>
+
+                    <div class="pull-right" ng-switch="match.model.contactType">
+                        <div ng-switch-when="External" class="text-right">
+                            <i class="fa fa-institution"></i> {{match.model.company}}
+                        </div>
+                        <div ng-switch-when="Personal" class="text-right">
+                            <i class="fa fa-heart"></i> Personal
+                        </div>
+                        <div ng-switch-when="GoogleContact" class="text-right">
+                            <i class="fa fa-google"></i> Contact
+                        </div>
+                        <div ng-switch-when="GoogleDirectory" class="text-right">
+                            <i class="fa fa-google"></i> User
+                        </div>
+                        <div ng-switch-when="Outlook" class="text-right">
+                            <i class="fab fa-microsoft"></i> Outlook
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </a>
+</script>
+<div class="modal-header">
+    <h5 class="modal-title">
+        <div class="row">
+            <div class="col-xs-10">
+                <span>{{ data.title }}</span>
+            </div>
+            <div class="col-xs-2 text-right">
+                <a href="" ng-click="closeDialog()"><span style="color:black"
+                                                          class="fa fa-times text-regular"></span></a>
+            </div>
+        </div>
+    </h5>
+</div>
+<div class="modal-body">
+    <div ng-switch on="data.dialMode"> <!-- ng-switch -->
+        <div ng-switch-when="DIALING">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><span class="fa fa-phone animated flash ringing"></span>
+                        Dialing</h3>
+                </div>
+                <div class="panel-body">
+                    <!--<button class="btn btn-default btn-sm" ng-click="campOn()">Camp on</button>-->
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6">
+                            <div class="row">
+                                <div class="col-xs-12 text-center">
+                                    <span class="fa fa-phone animated flash ringing"></span>
+
+                                    <p ng-bind-html="getActiveCallObj().dialingLabel"></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12 text-center">
+                                    <img ng-src="{{getActiveCallObj().imageURL}}" class="img-rounded"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                            <div class="btn-group btn-group-justified" style="padding-top: 5px">
+                                <div class="btn-group">
+                                    <button class="btn btn-default text-danger" ng-click="onHangup()">
+                                        <span class="glyphicon glyphicon-phone-alt text-danger"></span>
+                                        <span class="text-danger">{{::getLocalPhrase('ActiveCall.EndCall')}}</span>
+                                    </button>
+                                </div>
+                                <div class="btn-group">
+                                    <button ng-click="onHide()" class="btn btn-success">
+                                        <span class="fa fa-angle-double-down"></span> Hide
+                                    </button>
+                                </div>
+                            </div>
+                            <br/>
+                            <p class="text-center" ng-if="!isCallTransfer()">
+                                <a href ng-click="data.doNotShowAgain = !data.doNotShowAgain">
+                                    <i class="fa fa-lg text-primary"
+                                       ng-class="{'fa fa-check-square': data.doNotShowAgain, 'fa fa-square-o': !data.doNotShowAgain}"></i>
+                                    {{::getLocalPhrase('Dialog.DoNotShowAgain')}}
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- panel -->
+        </div>
+        <!-- ng-switch-when="DIALING" -->
+        <div ng-switch-default> <!-- dial panel -->
+
+            <div class="row" style="padding-left: 5px !important; padding-right: 5px !important;">
+
+                <div class="col-xs-12 col-sm-12" style="padding-right: 0px">
+                    <div class="input-group">
+                                        <span class="input-group-addon"><i
+                                                class="glyphicon glyphicon-search"></i></span>
+                        <input type="text"
+                               id="idInputNameOrExtension"
+                               style="width:100%"
+                               ng-keypress="keyPressed($event)"
+                               ng-model="data.selectedDialObject"
+                               placeholder="{{::getLocalPhrase('Label.EnterNameOrExt')}}"
+                               typeahead-template-url="dialContactTemplate.html"
+                               uib-typeahead="dialContactObj as dialContactObj.label for dialContactObj in data.dialNumberOptions | filter:{label:$viewValue} | limitTo:10"
+                               class="form-control">
+                        <div class="input-group-btn" ng-if="!isCallTransfer()">
+                            <button class="btn btn-primary" ng-class="{disabled: !data.selectedDialObject}"
+                                    ng-click="dialNumber()">{{data.dialButtonText}}
+                            </button>
+                        </div>
+                        <div class="input-group-btn" uib-dropdown is-open="callTransferSB" ng-if="isCallTransfer()">
+                            <button type="button" class="btn btn-primary " ng-click="transferCall()"
+                                    ng-class="{disabled: !data.selectedDialObject}">
+                                {{::getLocalPhrase('ActiveCall.Transfer')}}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <a href="" ng-click="toggleDialpad()" style="margin-top: 10px">
+                {{::getLocalPhrase('Dialpad')}} <i
+                ng-class="{'fa fa-chevron-right':globalVars.Settings.DialerCollapsed, 'fa fa-chevron-down' : !globalVars.Settings.DialerCollapsed}"></i>
+            </a>
+
+            <div uib-collapse="globalVars.Settings.DialerCollapsed">
+                <div class="text-center" style="margin-top: 10px">
+                    <a href="" class="btn btn-default keypad-btn" ng-click="clickDigit('1')">1</i></a>
+                    <a href="" class="btn btn-default keypad-btn" ng-click="clickDigit('2')">2<br/>ABC</i>
+                    </a>
+                    <a href="" class="btn btn-default keypad-btn" ng-click="clickDigit('3')">3<br/>DEF</i>
+                    </a>
+                </div>
+                <div class="text-center" style="margin-top: 5px">
+                    <a href="" class="btn btn-default keypad-btn" ng-click="clickDigit('4')">4<br/>GHI</i>
+                    </a>
+                    <a href="" class="btn btn-default keypad-btn" ng-click="clickDigit('5')">5<br/>JKL</i>
+                    </a>
+                    <a href="" class="btn btn-default keypad-btn" ng-click="clickDigit('6')">6<br/>MNO</i>
+                    </a>
+                </div>
+                <div class="text-center" style="margin-top: 5px">
+                    <a href="" class="btn btn-default keypad-btn" ng-click="clickDigit('7')">7<br/>PQRS</i>
+                    </a>
+                    <a href="" class="btn btn-default keypad-btn" ng-click="clickDigit('8')">8<br/>TUV</i>
+                    </a>
+                    <a href="" class="btn btn-default keypad-btn" ng-click="clickDigit('9')">9<br/>WXYZ</i>
+                    </a>
+                </div>
+                <div class="text-center" style="margin-top: 5px">
+                    <a href="" class="btn btn-default keypad-btn" ng-click="clickDigit('*')">*</i></a>
+                    <a href="" class="btn btn-default keypad-btn" ng-click="clickDigit('0')">0</i></a>
+                    <a href="" class="btn btn-default keypad-btn" ng-click="clickDigit('#')">#</i></a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- dial panel -->
+</div>
+<div class="modal-footer">
+    <div class="btn-group btn-group-justified">
+        <div class="btn-group" ng-if="getActiveCallObj().canComplete">
+            <button type="button" class="btn btn-default btn-sm"
+                    ng-click="onComplete()">
+                <span class="fa fa-link"></span>
+                <span> Connect</span>
+            </button>
+        </div>
+        <div class="btn-group" ng-if="getActiveCallObj().canRetrieve">
+            <button type="button" class="btn btn-default btn-sm" ng-click="onResume()">
+                <span class="fa fa-play"></span><span
+                    > Resume</span></button>
+        </div>
+        <div class="btn-group" ng-if="getActiveCallObj().canHangup">
+            <button type="button" class="btn btn-default btn-sm"
+                    ng-click="onHangup()">
+                <span class="glyphicon glyphicon-phone-alt text-danger"></span>
+                <span> {{ data.cancelButtonText }}</span>
+            </button>
+        </div>
+
+        <div class="btn-group" ng-if="getActiveCallObj().canComplete && getActiveCallObj().isConsult">
+            <button type="button" class="btn btn-default btn-sm"
+                    ng-click="onStopTransfer()">
+                <span class="glyphicon glyphicon-phone-alt text-danger"></span>
+                <span> Cancel</span>
+            </button>
+        </div>
+    </div>
+</div>

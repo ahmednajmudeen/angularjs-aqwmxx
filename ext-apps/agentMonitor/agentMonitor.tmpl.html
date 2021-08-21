@@ -1,0 +1,20 @@
+<style>
+    body {
+        /*    font-size: 12px; */
+    }
+</style>
+<div class="container-fluid">
+    <span ng-if="!agentMonitorCtrl.readyToDisplay"> <i class="fa fa-refresh fa-spin"></i> Initializing</span>
+
+    <div ng-if="agentMonitorCtrl.readyToDisplay">
+        <form novalidate>
+            <formly-form model="agentMonitorCtrl.model"
+                         fields="agentMonitorCtrl.fields"
+                         form="agentMonitorCtrl.form">
+            </formly-form>
+        </form>
+
+    </div>
+</div>
+
+

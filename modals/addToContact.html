@@ -1,0 +1,88 @@
+<style>
+    .modal-dialog {
+        overflow-y: initial !important;
+    }
+
+    .modal-body {
+        overflow-y: auto;
+        background-color: #f3f3f3;
+    }
+
+    .contactUserBox {
+        width: 275px;
+    }
+
+    .photo {
+        max-width: 42px;
+        margin-right: 3px;
+    }
+</style>
+
+
+<script type="text/ng-template" id="contactUserTemplate.html">
+    <a class="contactUserBox">
+        <div>
+            <div ng-if="match.model.imageURL" class="pull-left text-center photo">
+                <img ng-src="{{match.model.imageURL}}" class="img-responsive img-rounded">
+            </div>
+            <div ng-if="!match.model.imageURL" class="pull-left">
+                <span class="initials-logo" ng-class="match.model.contactType">{{match.model.initials}}</span>
+            </div>
+            <div>
+                <div>
+                    <span ng-bind-html="match.model.label"></span>
+                </div>
+                <div ng-if="match.model.isContact && match.model.company">
+                    <span>{{match.model.company}}</span>
+                </div>
+            </div>
+        </div>
+    </a>
+</script>
+<div class="modal-header">
+    <h5 class="modal-title">
+        <div class="row">
+            <div class="col-xs-10">
+                <span>{{vm.model.pageTitle}}</span>
+            </div>
+        </div>
+    </h5>
+</div>
+<div class="modal-body" ng-style="{height: vm.modalHeight + 'px'}">
+    <form novalidate>
+        <formly-form model="vm.model"
+                     fields="vm.fields"
+                     form="vm.form">
+        </formly-form>
+    </form>
+    <div ng-show="vm.model.operation === 'EXISTING'">
+        <label for="id_contact_typeahead" class="control-label ">
+            <span>{{::getLocalPhrase('contact')}} *</span>
+        </label>
+        <input
+            id="id_contact_typeahead"
+            name="id_contact_typeahead"
+            typeahead-editable="true"
+            type="text"
+            style="width:100%"
+            ng-model="vm.model.selectedContact"
+            placeholder="{{::getLocalPhrase('Label.EnterNameOrExt')}}"
+            typeahead-min-length="1"
+            typeahead-template-url="contactUserTemplate.html"
+            uib-typeahead="contactObj as contactObj.label for contactObj in vm.model.contactChoices  | filter:{label: $viewValue} | limitTo:5"
+            typeahead-on-select="vm.contactSelected($item)"
+            class="form-control"/>
+    </div>
+    <!--    <pre>{{agentLoginCtrl.model | json}}</pre>
+        <pre>{{agentLoginCtrl.form | json}}</pre>-->
+</div>
+<div class="modal-footer">
+    <div class="pull-right">
+        <button ng-click="vm.closeDialog()" class="btn btn-default">{{::getLocalPhrase('Cancel')}}
+        </button>
+        <button ng-click="vm.saveDialog()" class="btn btn-primary"
+                ng-disabled="vm.form.$invalid || vm.form.$error.required || (vm.model.operation === 'EXISTING' && !vm.model.selectedContact)">
+            {{::getLocalPhrase('Button.Add')}}
+        </button>
+    </div>
+</div>

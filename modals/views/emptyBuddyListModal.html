@@ -1,0 +1,31 @@
+<div class="modal-header">
+    <h5 class="modal-title">
+        <div class="row">
+            <div class="col-xs-10">
+                <span>{{::getLocalPhrase('EmptyBuddy.Title')}}</span>
+            </div>
+        </div>
+    </h5>
+</div>
+<div class="modal-body">
+    <p>
+        {{::getLocalPhrase('EmptyBuddy.main.para1')}}
+    </p>
+    <p>
+        {{::getLocalPhrase('EmptyBuddy.main.para2')}}
+    </p>
+</div>
+<div class="modal-footer">
+    <p class="pull-left">
+        <a href ng-click="data.doNotShowAgain = !data.doNotShowAgain">
+            <i class="fa fa-lg text-primary"
+               ng-class="{'fa fa-check-square': data.doNotShowAgain, 'fa fa-square-o': !data.doNotShowAgain}"></i>
+            {{::getLocalPhrase('Dialog.DoNotShowAgain')}}
+        </a>
+    </p>
+    <div class="pull-right">
+        <button ng-click="buddyListUpdateClicked()" class="btn btn-primary">{{::getLocalPhrase('AddBuddyList')}}
+        </button>
+        <button ng-click="closeDialog()" class="btn btn-default">{{::getLocalPhrase('Button.Later')}}</button>
+    </div>
+</div>

@@ -1,0 +1,245 @@
+<div class="modal-header">
+    <h5 class="modal-title">
+        <div class="row">
+            <div class="col-xs-10">
+                <span>{{::data.dialogTitle}}</span>
+            </div>
+            <div class="col-xs-2 text-right">
+                <a href="" ng-click="closeDialog()"><span style="color:black"
+                                                          class="fa fa-times text-regular"></span></a>
+            </div>
+        </div>
+    </h5>
+</div>
+
+<div class="modal-body">
+
+    <div class="panel panel-danger" ng-if="data.errors.length">
+        <div class="panel-heading">
+            <div class="panel-title">{{::getLocalPhrase('Text.Errors')}}</div>
+        </div>
+        <div class="panel-body">
+            <p class="text-danger" ng-bind-html="data.errors"></p>
+        </div>
+    </div>
+
+    <uib-accordion>
+        <div uib-accordion-group is-open="status.openStartTime">
+            <uib-accordion-heading>
+                <span ng-class="{'text-danger': data.errorStartTime}">{{::getLocalPhrase('PresenceEvents.EventStart')}}</span>
+                <span style="font-weight: 500;font-size:12px">{{data.scheduleObj.startTime | date : 'mediumDate' }} {{data.scheduleObj.startTime | date : 'shortTime' }}</span>
+                <i class="pull-right glyphicon"
+                   ng-class="{'glyphicon-chevron-down': status.openStartTime, 'glyphicon-chevron-right': !status.openStartTime}"></i>
+            </uib-accordion-heading>
+            <form role="form" name="startTimeForm">
+                <div class="form-group">
+                    <label class="control-label">{{::getLocalPhrase('PresenceEvents.EventStartTime')}}</label>
+
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6 text-center">
+                            <div class="input-group">
+                                <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="startDate.opened = true"><i
+                                        class="glyphicon glyphicon-calendar"></i></button>
+                                </span>
+                                <input type="text" class="form-control" uib-datepicker-popup="shortDate"
+                                       ng-model="data.scheduleObj.startTime"
+                                       is-open="startDate.opened"
+                                       datepicker-options="dateOptions"
+                                       close-text="Close"/>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 text-center">
+                            <i class="pull-left fa fa-clock-o" style="margin-top: 10px"></i>
+                            <div uib-timepicker class="pull-left" ng-model="data.scheduleObj.startTime"
+                                 ng-change="updateStartTime()" hour-step="1" minute-step="5"
+                                 show-meridian="true" show-spinners="false"></div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label">{{::getLocalPhrase('Status')}}</label><br/>
+
+                    <div style="padding-left:2em">
+                        <div class="pull-left" uib-dropdown
+                             is-open="data.open.dropdown1">
+                            <a href uib-dropdown-toggle>
+                                <span ng-class="presenceStatusColor(data.scheduleObj.Status)">
+                                    <span ng-class="presenceStatusIcon(data.scheduleObj.Status)"></span>{{presenceStatusLabel(data.scheduleObj.Status)}} <b
+                                        class="caret"></b>
+                                </span>
+                            </a>
+                            <ul uib-dropdown-menu role="menu">
+                                <li ng-repeat="(key,presence) in presenceStatusArray()"
+                                    ng-click="data.scheduleObj.Status = presence.data; data.open.dropdown1=false;">
+                                    <a
+                                            ng-href><span
+                                            class="glyphicon {{presence.icon}}"></span> {{presence.label}}</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <br/>
+                </div>
+                <div class="form-group">
+                    <label for="subject">{{::getLocalPhrase('Presence.Subject')}}</label>
+                    <input type="text" id="subject" class="form-control" ng-model="data.scheduleObj.Title"
+                           placeholder="{{::getLocalPhrase('Presence.SubjectPlaceholder')}}">
+                </div>
+
+                <div class="form-group">
+                    <label for="location">{{::getLocalPhrase('Location')}}</label>
+                    <input type="text" id="location" class="form-control" ng-model="data.scheduleObj.Location"
+                           placeholder="{{::getLocalPhrase('Presence.LocationPlaceholder')}}">
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label">{{::getLocalPhrase('CallHandling.Text')}}</label><br/>
+
+                    <div style="padding-left:2em">
+                <span uib-dropdown is-open="data.callForwardDropdown">
+                  <a href uib-dropdown-toggle>
+                      <span ng-class="data.forwardSetting.obj.icon"></span> <span
+                          ng-class="data.forwardSetting.obj.color">{{data.forwardSetting.obj.label}}</span><b
+                          class="caret"></b>
+                  </a>
+                  <ul uib-dropdown-menu role="menu">
+                      <li ng-repeat="callFwdObject in data.callHandlingOptions">
+                          <a href ng-click="forwardSettingChanged(callFwdObject, 'ForwardSetting')">
+                              <i ng-class="callFwdObject.icon"></i> <span ng-class="callFwdObject.color">{{callFwdObject.label}}</span>
+                          </a>
+                      </li>
+                  </ul>
+                </span>
+                <span style="padding-left:10px" ng-if="data.forwardSetting.obj.needsNumber">
+                    {{::getLocalPhrase('Number')}}: <input ng-model="data.scheduleObj.ForwardSetting.Number"/>
+                </span>
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="remarks">{{::getLocalPhrase('Notes')}}</label>
+                    <input type="text" class="form-control" id="remarks" ng-model="data.scheduleObj.Note"
+                           placeholder="{{::getLocalPhrase('Presence.RemarksPlaceholder')}}">
+                </div>
+
+            </form>
+        </div>
+        <div uib-accordion-group is-open="status.openReturnTime">
+            <uib-accordion-heading>
+                <span ng-class="{'text-danger': data.errorReturnTime}">{{::getLocalPhrase('PresenceEvents.EventFinish')}}</span>
+                <span style="font-weight: 500;font-size:12px">{{data.scheduleObj.returnTime | date : 'mediumDate' }} {{data.scheduleObj.returnTime | date : 'shortTime' }}</span><i
+                    class="pull-right glyphicon"
+                    ng-class="{'glyphicon-chevron-down': status.openReturnTime, 'glyphicon-chevron-right': !status.openReturnTime}"></i>
+            </uib-accordion-heading>
+            <form role="form" name="returnTimeForm">
+                <div class="form-group">
+                    <label class="control-label">{{::getLocalPhrase('PresenceEvents.EventFinishTime')}}</label>
+
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6 text-center">
+                            <div class="input-group">
+                                <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="endDate.opened = true"><i
+                                        class="glyphicon glyphicon-calendar"></i></button>
+                                </span>
+                                <input type="text" class="form-control" uib-datepicker-popup="shortDate"
+                                       ng-model="data.scheduleObj.returnTime" ng-change="updateReturnTime()"
+                                       is-open="endDate.opened"
+                                       datepicker-options="dateOptions"
+                                       close-text="Close"/>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 text-center">
+                            <i class="pull-left fa fa-clock-o" style="margin-top: 10px"></i>
+                            <div uib-timepicker class="pull-left" ng-model="data.scheduleObj.returnTime"
+                                 ng-change="updateReturnTime()" hour-step="1" minute-step="5"
+                                 show-meridian="true" show-spinners="false"></div>
+
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-offset-1 col-xs-11">
+                            <div style="marin-left:10px">
+                                <a href ng-click="data.scheduleObj.ApplyEndStatus = !data.scheduleObj.ApplyEndStatus">
+                                    <i class="fa fa-lg text-primary"
+                                       ng-class="{'fa fa-check-square': data.scheduleObj.ApplyEndStatus, 'fa fa-square-o': !data.scheduleObj.ApplyEndStatus}"></i>
+                                    {{::getLocalPhrase('PresenceEvents.FinishStatusTitle')}}
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-xs-offset-1 col-xs-11">
+                            <div ng-if="data.scheduleObj.ApplyEndStatus">
+                                <div class="well well-sm">
+                                    <div class="row">
+                                        <div class="col-xs-12">
+
+
+                                            <div class="pull-left" uib-dropdown
+                                                 is-open="data.open.dropdown2">
+                                                <a href uib-dropdown-toggle>
+                                            <span ng-class="presenceStatusColor(data.scheduleObj.EndStatus)">
+                                                <span ng-class="presenceStatusIcon(data.scheduleObj.EndStatus)"></span>{{presenceStatusLabel(data.scheduleObj.EndStatus)}} <b
+                                                    class="caret"></b>
+                                            </span>
+                                                </a>
+                                                <ul uib-dropdown-menu role="menu">
+                                                    <li ng-repeat="(key,presence) in presenceStatusArray()"
+                                                        ng-click="data.scheduleObj.EndStatus = presence.data; data.open.dropdown2=false;">
+                                                        <a
+                                                                ng-href><span
+                                                                class="glyphicon {{presence.icon}}"></span>
+                                                            {{presence.label}}</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 ">
+                                            <br/>
+                                            <span uib-dropdown is-open="data.endCallForwardDropdown">
+                                                <a href uib-dropdown-toggle>
+                                                    <span ng-class="data.endForwardSetting.obj.icon"></span> <span
+                                                        ng-class="data.endForwardSetting.obj.color">{{data.endForwardSetting.obj.label}}</span><b
+                                                        class="caret"></b>
+                                                </a>
+                                                <ul uib-dropdown-menu role="menu">
+                                                    <li ng-repeat="callFwdObject in data.callHandlingOptions">
+                                                        <a href
+                                                           ng-click="forwardSettingChanged(callFwdObject, 'EndForwardSetting')">
+                                                            <i ng-class="callFwdObject.icon"></i> <span
+                                                                ng-class="callFwdObject.color">{{callFwdObject.label}}</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </span><br/>
+                                            <span style="padding-left:3em"
+                                                  ng-if="data.endForwardSetting.obj.needsNumber">
+                                                {{::getLocalPhrase('Number')}}: <input
+                                                    ng-model="data.scheduleObj.EndForwardSetting.Number"/>
+                                            </span>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </uib-accordion>
+</div>
+<div class="modal-footer">
+    <div class="pull-right">
+        <button ng-click="closeDialog()" class="btn btn-default">{{::getLocalPhrase('Cancel')}}</button>
+        <button ng-click="saveDialog()" class="btn btn-primary">{{::getLocalPhrase('Button.Save')}}</button>
+    </div>
+</div>

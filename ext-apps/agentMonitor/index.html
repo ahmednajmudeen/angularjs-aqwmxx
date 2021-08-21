@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html ng-app="AgentMonitorModule" ng-cloak>
+<head>
+    <title>Agent Monitor</title>
+
+    <meta charset="utf-8"/>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <!-- Released Version -->
+    <link href="../../../libs/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="../../../libs/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet"/>
+
+    <!-- use for internal testing onl
+        <link rel="stylesheet" href="https://ucserver.red-phoenix.com/shared-libs/fontawesome-pro-5.11.2/css/all.min.css">
+        <link rel="stylesheet" href="https://ucserver.red-phoenix.com/shared-libs/fontawesome-pro-5.11.2/css/v4-shims.min.css">
+    -->
+    <link rel="stylesheet" href="/shared-libs/fontawesome-pro-5.11.2/css/all.min.css">
+    <link rel="stylesheet" href="/shared-libs/fontawesome-pro-5.11.2/css/v4-shims.min.css">
+
+    <link href="../../../libs/ng-modules.min.css" rel="stylesheet"/>
+    <link href="../../../libs/grid/ui-grid.min.css" rel="stylesheet"/>
+
+    <link href="../../../app.min.css" rel="stylesheet"/>
+</head>
+<body ng-controller="AgentMonitorCtrl as agentMonitorCtrl"
+      ng-init="agentMonitorCtrl.windowLoaded()"
+      resize>
+
+<div ng-include="'agentMonitor.tmpl.html'"></div>
+
+<script src="../../../libs/misc.min.js"></script>
+
+<script>
+    var DebugInfoEnabled = false;
+</script>
+
+<script src="../../../libs/angular/angular.min.js"></script>
+
+<script src="../UCLocale.min.js"></script>
+<script src="../services/httpInterceptor.js"></script>
+<script src="../../../libs/grid/ui-grid.min.js"></script>
+<script src="../../../libs/ng-modules.min.js"></script>
+
+<script src="agentMonitor.controller.js"></script>
+<script src="agent-utils.min.js"></script>
+
+<script src="../../../libs/angular-ui.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,48 @@
+<style>
+    .modal-dialog {
+        overflow-y: initial !important;
+    }
+
+    .modal-body {
+        overflow-y: auto;
+        background-color: #f3f3f3;
+    }
+</style>
+<div class="modal-header">
+    <div class="row">
+        <div class="col-xs-10">
+            <span>{{::getLocalPhrase('UserBulletin.Title')}}</span>
+        </div>
+        <div class="col-xs-2 text-right">
+            <a href="" ng-click="vm.close()"><span style="color:black" class="fa fa-times text-regular"></span></a>
+        </div>
+    </div>
+</div>
+
+<div class="modal-body" ng-style="{height: vm.modalHeight + 'px'}">
+
+    <div ng-bind-html="vm.htmlBody"></div>
+
+</div>
+
+<div class="modal-footer">
+    <p class="pull-left">
+        <a href ng-click="vm.doNotShowAgain = !vm.doNotShowAgain">
+            <i class="fa fa-lg text-primary"
+               ng-class="{'fa fa-check-square': vm.doNotShowAgain, 'fa fa-square-o': !vm.doNotShowAgain}"></i>
+            {{::getLocalPhrase('UserBulletin.DoNotShowAgain')}}
+        </a>
+    </p>
+    <div class="pull-right">
+        <button ng-click="vm.back()" class="btn btn-default" ng-if="vm.bulletins.length>1 && vm.index >0">
+            {{::getLocalPhrase('Button.Back')}}
+        </button>
+        <button ng-click="vm.next()" class="btn btn-default"
+                ng-if="vm.bulletins.length>1 && vm.index <vm.bulletins.length-1">{{::getLocalPhrase('Button.Next')}}
+        </button>
+        <button ng-click="vm.close()" class="btn btn-primary"
+                ng-if="vm.doNotShowAgain || vm.index>=vm.bulletins.length-1">
+            {{::getLocalPhrase('Button.Close')}}
+        </button>
+    </div>
+</div>

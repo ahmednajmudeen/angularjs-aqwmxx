@@ -1,0 +1,187 @@
+<style>
+    .modal-dialog {
+        overflow-y: initial !important;
+    }
+
+    .modal-body {
+        overflow-y: auto;
+        background-color: #f3f3f3;
+    }
+</style>
+
+<div class="modal-header">
+    <h5 class="modal-title">
+        <div class="row">
+            <div class="col-xs-10">
+                <span>{{::dialogTitle}}</span>
+            </div>
+            <div class="col-xs-2 text-right">
+                <a href="" ng-click="closeDialog()"><span style="color:black"
+                                                          class="fa fa-times text-regular"></span></a>
+            </div>
+
+        </div>
+    </h5>
+</div>
+
+
+<div class="modal-body" ng-style="{height: modalHeight + 'px'}">
+    <div class="row">
+        <div class="col-xs-12 col-sm-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">{{::getLocalPhrase('Contact.GeneralCategory')}}</div>
+                <div class="panel-body">
+                    <div ng-if="data.contactType==='Internal'">
+                        <div class="row">
+                            <div class="col-xs-5">
+                                <p>{{::getLocalPhrase('Contact.GeneralShowInDir')}}</p>
+                            </div>
+                            <div class="col-xs-7">
+                                <toggle-switch ng-model="data.contact.Not_IsHidden" class="switch-success switch-mini"
+                                               on-label="{{::getLocalPhrase('Button.On')}}"
+                                               off-label="{{::getLocalPhrase('Button.Off')}}"></toggle-switch>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-5">
+                                <p>{{::getLocalPhrase('Contact.ShowBLFStatus')}}</p>
+                            </div>
+                            <div class="col-xs-7">
+                                <toggle-switch ng-model="data.contact.BlfEnabled" class="switch-success switch-mini"
+                                               on-label="{{::getLocalPhrase('Button.On')}}"
+                                               off-label="{{::getLocalPhrase('Button.Off')}}"
+                                               is-disabled="!data.contact.HasBlf"></toggle-switch>
+                            </div>
+                        </div>
+                        <div class="well well-sm" style="margin-top:5px">
+                            <div class="row">
+                                <div class="col-xs-6 text-right">
+                                    <div ng-if="!data.uploadingPicture">
+                                        <img ng-src="{{data.photo}}" class="img-rounded"/>
+                                    </div>
+                                    <div ng-if="data.uploadingPicture">
+                                        <i class="fa fa-refresh fa-3x fa-spin"/>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 text-left">
+                                    <input type="file" id="idPhoto2" capture="camera"
+                                           accept="image/*"
+                                           nv-file-select="" uploader="uploader"
+                                           ng-hide="true" >
+                                    <a href ng-click="changePhoto();"><i class="fa fa-camera"/>
+                                        {{::getLocalPhrase('Button.Change')}}</a>
+                                    <br/><br/>
+                                    <a href ng-click="clearPhoto()"><i class="fa fa-trash-o"/>
+                                        {{::getLocalPhrase('Button.ClearPhoto')}}</a>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <form name="idGeneralForm">
+                        <rp-contact-general-edit data="data" type="data.contactType" photoUpdate="photoChanged()"/>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">Company</div>
+                <div class="panel-body">
+                    <form name="idCompanyForm">
+                        <rp-contact-company-edit data="data" type="data.contactType"/>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">Alternate Numbers</div>
+                <div class="panel-body">
+                    <form editable-form name="tableform" onaftersave="saveAlternateNumberChanges()"
+                          oncancel="cancelAlternateNumberChanges()">
+
+                        <div class="btn-edit" style="margin-bottom: 5px">
+                            <button type="button" class="btn btn-default btn-sm" ng-if="!tableform.$visible"
+                                    ng-click="addRowIfEmpty(); tableform.$show()">
+                                <span class="fa fa-edit fa-lg"></span><span class="hidden-xs"> Edit</span></a>
+                            </button>
+                        </div>
+                        <div class="btn-form" ng-if="tableform.$visible" style="margin-bottom: 5px">
+                            <button type="button" ng-disabled="tableform.$waiting" ng-click="addAlternateNumber()"
+                                    class="btn btn-default btn-sm">
+                                <span class="fa fa-plus-square-o fa-lg"></span><span
+                                class="hidden-xs"> Add</span></a>
+                            </button>
+                            <button type="submit" ng-disabled="tableform.$waiting" class="btn btn-primary btn-sm">
+                                Done
+                            </button>
+                            <button type="button" ng-disabled="tableform.$waiting" ng-click="tableform.$cancel()"
+                                    class="btn btn-default btn-sm">Cancel
+                            </button>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover table-condensed table-striped">
+                                <thead>
+                                <tr style="font-weight: bold">
+                                    <td style="width: 50%">Number</td>
+                                    <td style="width: 50%">Type</td>
+                                    <td style="width: 20%"><span ng-if="tableform.$visible"></span></td>
+                                </tr>
+                                </thead>
+                                <tr ng-repeat="altNumber in data.contact.AlternateNumbers">
+                                    <td>
+                            <span editable-text="altNumber.Number"
+                                  e-form="tableform"
+                                  onbeforesave="checkNumber($data)"
+                            >
+                                {{ altNumber.Number }}
+                            </span>
+                                    </td>
+                                    <td>
+                            <span editable-select="altNumber.AltType" e-form="tableform"
+                                  e-ng-options="s.type as s.label for s in getAltNumTypes()">
+                                {{ showAltNumType(altNumber.AltType) }}
+                            </span>
+                                    </td>
+                                    <td style="vertical-align: middle">
+                                        <button type="button" ng-if="tableform.$visible"
+                                                ng-click="deleteAlternateNumber($index)"
+                                                class="btn btn-xs btn-danger pull-right">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">Notes</div>
+                <div class="panel-body">
+                    <textarea type="text" class="form-control" ng-model="data.contact.Notes" id="idNotes"
+                              placeholder="Enter notes"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="modal-footer">
+    <div class="pull-right">
+        <button ng-click="closeDialog()" class="btn btn-default" ng-disabled="altNumsChanged">
+            {{::getLocalPhrase('Cancel')}}
+        </button>
+        <button ng-click="saveDialog()" class="btn btn-primary" ng-disabled="altNumsChanged">
+            {{::getLocalPhrase('Button.Save')}}
+        </button>
+    </div>
+</div>

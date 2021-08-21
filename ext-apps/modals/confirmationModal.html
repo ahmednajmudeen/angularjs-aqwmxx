@@ -1,0 +1,29 @@
+<div class="modal-header">
+    <h5 class="modal-title">
+        <div class="row">
+            <div class="col-xs-10">
+                <span>{{ ::data.title }}</span>
+            </div>
+            <div class="col-xs-2 text-right">
+                <a href="" ng-click="closeDialog()"><span style="color:black" class="fa fa-times text-regular"></span></a>
+            </div>
+        </div>
+    </h5>
+</div>
+<div class="modal-body">
+    <div class="row">
+        <div class="col-xs-offset-2 col-xs-10">
+            <p ng-bind-html="data.message"></p>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button ng-if="data.buttons.cancel" ng-click="closeDialog()" class="btn btn-default">
+        {{::getPhrase('Cancel')}}
+    </button>
+    <button ng-if="data.buttons.no" ng-click="noClicked()" class="btn btn-default">{{::getPhrase('Button.No')}}</button>
+    <button ng-if="data.buttons.ok" ng-click="yesClicked()" class="btn btn-primary">{{::getPhrase('Button.Ok')}}
+    </button>
+    <button ng-if="data.buttons.yes" ng-click="yesClicked()" class="btn btn-primary">{{::getPhrase('Button.Yes')}}
+    </button>
+</div>

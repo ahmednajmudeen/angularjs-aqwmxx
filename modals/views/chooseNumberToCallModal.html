@@ -1,0 +1,60 @@
+<style>
+    .modal-dialog {
+        overflow-y: initial !important;
+    }
+
+    .modal-body {
+        overflow-y: auto;
+        background-color: #f3f3f3;
+    }
+</style>
+<div class="modal-header">
+    <h5 class="modal-title">
+        <div class="row">
+            <div class="col-xs-10">
+                <span>{{::getLocalPhrase('SelectNumberToCall.Title')}}</span>
+            </div>
+            <div class="col-xs-2 text-right">
+                <a href="" ng-click="closeDialog()"><span style="color:black"
+                                                          class="fa fa-times text-regular"></span></a>
+            </div>
+
+        </div>
+    </h5>
+</div>
+<div class="modal-body"  ng-style="{height: modalHeight + 'px'}">
+    <div>
+        <img ng-src="{{data.userObj.photo}}" class="img-responsive img-rounded" style="width: 32px"/> <span> {{data.userObj.name}}</span>
+    </div>
+    <ul class="list-group" style="margin-top:5px">
+        <li class="list-group-item">
+            <div>
+                {{data.userObj.extension}}
+                <div class="pull-right">
+                    <button class="btn btn-primary btn-xs" ng-click="chooseNumber( -1 )">{{::getLocalPhrase('Dial.Call')}}</button>
+                </div>
+            </div>
+        </li>
+<!--        <li class="list-group-item">
+            <div>
+                <i class="fas fa-video text-primary"></i> {{data.userObj.extension}}
+                <div class="pull-right">
+                    <button class="btn btn-primary btn-xs" ng-click="chooseNumber( -2 )">{{::getLocalPhrase('Dial.Call')}}</button>
+                </div>
+            </div>
+        </li>-->
+        <li class="list-group-item" ng-repeat="altNumber in data.userObj.AlternateNumbers">
+            <div>
+                {{altNumber.Number}}
+                <div class="pull-right">
+                    ({{showAltNumType(altNumber.AltType) }}) <button class="btn btn-primary btn-xs" ng-click="chooseNumber( $index )">{{::getLocalPhrase('Dial.Call')}}</button>
+                </div>
+            </div>
+        </li>
+    </ul>
+</div>
+<div class="modal-footer">
+    <div class="pull-right">
+        <button ng-click="closeDialog()" class="btn btn-default">{{::getLocalPhrase('Button.Close')}}</button>
+    </div>
+</div>

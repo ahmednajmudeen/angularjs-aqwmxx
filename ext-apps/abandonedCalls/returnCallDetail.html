@@ -1,0 +1,114 @@
+<style>
+    .modal-dialog {
+        overflow-y: initial !important;
+    }
+
+    .modal-body {
+        overflow-y: auto;
+        background-color: #f3f3f3;
+        font-size: 100%;
+    }
+
+    .call-well {
+        margin-left: 3px;
+        margin-bottom: 20px;
+        padding: 2px;
+        border: 1px solid #e3e3e3;
+        border-radius: 0px;
+        background-color: #ffffff;
+        width: 290px;
+    }
+
+    .ringing {
+        -webkit-animation-duration: 2s;
+        -webkit-animation-delay: 1s;
+        -webkit-animation-iteration-count: infinite;
+        -moz-animation-duration: 2s;
+        -moz-animation-delay: 1s;
+        -moz-animation-iteration-count: infinite;
+    }
+
+    textarea {
+        resize: none;
+    }
+</style>
+<div class="modal-header">
+    <h5 class="modal-title">
+        <div class="row">
+            <div class="col-xs-10">
+                <span>{{::getPhrase('CallbackStatus')}}</span>
+            </div>
+        </div>
+    </h5>
+</div>
+<div class="modal-body">
+    <div class="container-fluid">
+        <div class="row">
+            <!-- display calling panel -->
+            <div class="col-xs-offset-2 col-xs-8" ng-if="returnCallDetailCtrl.callInProgress">
+                <div class="text-center">
+                    <div class="text-center" ng-if="!returnCallDetailCtrl.event">
+                        <span>Dialing {{::returnCallDetailCtrl.numberDialed}}</span>
+                    </div>
+                    <div class="call-well text-center" ng-if="returnCallDetailCtrl.event">
+                        <span>{{::returnCallDetailCtrl.calledName}}</span><br/>
+                        <span>{{::returnCallDetailCtrl.calledID}}</span><br/>
+                        <i ng-class="returnCallDetailCtrl.image"></i>
+                        <span ng-if="returnCallDetailCtrl.event==='Connected'"> ({{returnCallDetailCtrl.connectedDuration | shortDuration}})</span>
+
+                        <div ng-if="returnCallDetailCtrl.callObj.CanHangup" class="btn-group btn-group-justified"
+                             style="padding:5px 1px 2px 1px">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default"
+                                        ng-click="returnCallDetailCtrl.onHangup()"
+                                        ng-disabled="returnCallDetailCtrl.disableHangup">
+                                    <span class="glyphicon glyphicon-phone-alt text-danger"></span>
+                                    <span class="text-danger"> {{::getPhrase("ActiveCall.EndCall")}}</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- display calling panel post-call -->
+            <div class="col-xs-offset-2 col-xs-8"
+                 ng-if="!returnCallDetailCtrl.callInProgress && returnCallDetailCtrl.numberDialed">
+                <div class="text-center">
+                    <div class="call-well text-center">
+                        <span>{{::returnCallDetailCtrl.calledName}}</span><br/>
+                        <span>{{::returnCallDetailCtrl.calledID}}</span><br/>
+                        <span ng-if="returnCallDetailCtrl.connectedDuration">{{returnCallDetailCtrl.connectedDuration | shortDuration}}</span>
+<!--                        <span ng-if="!returnCallDetailCtrl.connectedDuration">Failed to reach other party</span>-->
+                    </div>
+                </div>
+            </div>
+
+            <!-- display form to collect comments and state -->
+            <div class="col-xs-12">
+                <form novalidate>
+                    <formly-form model="returnCallDetailCtrl.model"
+                                 fields="returnCallDetailCtrl.fields"
+                                 form="returnCallDetailCtrl.form">
+                    </formly-form>
+                </form>
+            </div>
+            </div>
+    </div>
+    <!--
+        <pre>{{returnCallDetailCtrl.model | json}}</pre>
+        <pre>{{returnCallDetailCtrl.form | json}}</pre>
+    -->
+</div>
+<div class="modal-footer">
+    <div class="pull-right">
+        <button ng-click="returnCallDetailCtrl.closeDialog()"
+                class="btn btn-default">{{::getPhrase("Cancel")}}
+        </button>
+        <button ng-click="returnCallDetailCtrl.saveDialog()"
+                class="btn btn-primary"
+                ng-disabled="(returnCallDetailCtrl.form.$invalid || returnCallDetailCtrl.form.$error.required)">
+            {{::getPhrase("Update")}}
+        </button>
+    </div>
+</div>

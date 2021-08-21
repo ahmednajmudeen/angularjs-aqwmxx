@@ -1,0 +1,85 @@
+<div class="modal-header">
+    <h5 class="modal-title">
+        <div class="row">
+            <div class="col-xs-10">
+                <span>{{::getLocalPhrase('PresenceEvents.Title')}}</span>
+            </div>
+            <div class="col-xs-2 text-right">
+                <a href="" ng-click="closeDialog()"><span style="color:black"
+                                                          class="fa fa-times text-regular"></span></a>
+            </div>
+
+        </div>
+    </h5>
+</div>
+
+<div class="modal-body">
+    <div>
+        <alert ng-repeat="alert in data.alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+    </div>
+    <div>
+        <ng-pluralize count="data.schedules.length"
+                      when="{'0': getLocalPhrase('PresenceEvents.NoEvents'),
+                     'one': getLocalPhrase('PresenceEvents.OneEvent'),
+                     'other': getLocalPhrase('PresenceEvents.MultipleEvents', [data.schedules.length])}">
+        </ng-pluralize>
+        <button ng-click="addPresenceEvent()" class="btn btn-sm btn-primary"><i class="fa fa-plus"></i> {{::getLocalPhrase('PresenceEvents.Button.AddEvent')}}
+        </button>
+    </div>
+
+    <div scroll-glue style="margin-top: 10px">
+        <div class="col-xs-12 well well-sm" ng-repeat="scheduleObj in data.schedules">
+            <div class="row">
+                <div class="col-xs-12">
+                    <span class="fa fa-calendar"></span> <span style="font-weight: 500">{{scheduleObj.StartTime | rpPrettyDate}} to {{scheduleObj.ReturnTime | rpPrettyDate}}</span>
+
+                    <div class="pull-right" >
+                        <a href ng-click="copyPresenceEvent(scheduleObj)"><i class="fa fa-copy"></i></a>
+                        <a href ng-click="editPresenceEvent(scheduleObj)" style="margin-left: 1.5em"><i class="fa fa-pencil"></i></a>
+                        <a href ng-click="deletePresenceEvent(scheduleObj)" style="margin-left: 1.5em"><i class="fa fa-times text-danger"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    Set status to
+                        <span ng-class="presenceStatusColor(scheduleObj.Status)">
+                            <i ng-class="presenceStatusIcon(scheduleObj.Status)"></i>&nbsp;<span>{{presenceStatusLabel(scheduleObj.Status)}}</span>
+                        </span>
+                    <div class="pull-right" >
+                        <span ng-if="data.schedules.length > 1" style="font-weight: 400">{{$index + 1}} of {{data.schedules.length}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row" ng-if="scheduleObj.Title">
+                <div class="col-xs-12">
+                        <span
+                                style="overflow: hidden;white-space:nowrap;text-overflow:ellipsis;width:100%;display:inline-block">
+                            {{scheduleObj.Title}}
+                        </span>
+                </div>
+            </div>
+            <div class="row" ng-if="scheduleObj.Location">
+                <div class="col-xs-12">
+                        <span
+                                style="overflow: hidden;white-space:nowrap;text-overflow:ellipsis;width:100%;display:inline-block">
+                            {{scheduleObj.Location}}
+                        </span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <span ng-bind-html="displayCallForwardSummary( scheduleObj.ForwardSetting.Mode, scheduleObj.ForwardSetting.Number  )"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="modal-footer">
+    <div class="pull-right">
+        <button ng-click="closeDialog()" class="btn btn-primary">{{::getLocalPhrase('Button.Close')}}</button>
+    </div>
+</div>

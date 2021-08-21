@@ -1,0 +1,51 @@
+<style>
+    .modal-dialog {
+        overflow-y: initial !important;
+    }
+
+    .modal-body {
+        overflow-y: auto;
+        background-color: #f3f3f3;
+    }
+</style>
+<div class="modal-header">
+    <h5 class="modal-title">
+        <span>Incoming Video Call</span>
+    </h5>
+</div>
+<div class="modal-body">
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="text-center">
+                    <span class="fas fa-video text-primary animated flash ringing"></span> <span
+                        style="font-weight: 500; ">{{incomingVideoCtrl.userObj.name}}</span>
+                </div>
+                <div class="text-center">
+                    <div class="col-xs-offset-3 col-xs-6 text-center">
+                        <img ng-src="{{incomingVideoCtrl.userObj.photo}}" class="img-rounded">
+                    </div>
+                </div>
+                <div class="text-center">
+                    <h4>{{incomingVideoCtrl.userObj.number}}</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="modal-footer">
+    <div class="btn-group btn-group-justified">
+
+        <div class="btn-group" role="group">
+            <button ng-click="incomingVideoCtrl.acceptCall()" class="btn btn-primary">
+                <span class="fas fa-video"></span> {{incomingVideoCtrl.acceptButtonText}}
+            </button>
+        </div>
+        <div class="btn-group" role="group">
+            <button ng-click="incomingVideoCtrl.rejectCall()" class="btn btn-default">
+                Decline
+            </button>
+        </div>
+    </div>
+</div>

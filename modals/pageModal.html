@@ -1,0 +1,39 @@
+<style>
+    .modal-dialog {
+        overflow-y: initial !important;
+    }
+
+    .modal-body {
+        overflow-y: auto;
+        background-color: #f3f3f3;
+    }
+    hr {
+        margin-top:5px;
+        margin-bottom:10px;
+    }
+</style>
+<div class="modal-header">
+    <h5 class="modal-title">
+        <div class="row">
+            <div class="col-xs-10">
+                <span>{{PageCtrl.model.pageTitle}}</span>
+            </div>
+        </div>
+    </h5>
+</div>
+<div class="modal-body">
+    <form novalidate>
+        <formly-form model="PageCtrl.model"
+                     fields="PageCtrl.fields"
+                     form="PageCtrl.form">
+        </formly-form>
+    </form>
+
+    <!--    <pre>{{PageCtrl.model | json}}</pre>
+        <pre>{{PageCtrl.form | json}}</pre>-->
+</div>
+<div class="modal-footer">
+    <div class="pull-right">
+        <button ng-click="PageCtrl.closeDialog()" class="btn btn-default">{{::getLocalPhrase('Button.Close')}}</button>
+    </div>
+</div>

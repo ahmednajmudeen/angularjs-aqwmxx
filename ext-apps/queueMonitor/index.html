@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html ng-app="QueueMonitorModule" ng-cloak>
+<head>
+    <title>Queue Monitor</title>
+
+    <meta charset="utf-8"/>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <!-- Released Version -->
+    <link href="../../../libs/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="../../../libs/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet"/>
+
+    <!-- use for internal testing
+    <link rel="stylesheet" href="https://ucserver.red-phoenix.com/shared-libs/fontawesome-pro-5.11.2/css/all.min.css">
+    <link rel="stylesheet" href="https://ucserver.red-phoenix.com/shared-libs/fontawesome-pro-5.11.2/css/v4-shims.min.css">
+    -->
+    <link rel="stylesheet" href="/shared-libs/fontawesome-pro-5.11.2/css/all.min.css">
+    <link rel="stylesheet" href="/shared-libs/fontawesome-pro-5.11.2/css/v4-shims.min.css">
+
+    <link href="../../../libs/ng-modules.min.css" rel="stylesheet"/>
+    <link href="../../../libs/grid/ui-grid.min.css" rel="stylesheet"/>
+
+    <link href="../../../app.min.css" rel="stylesheet"/>
+</head>
+<body ng-controller="QueueMonitorCtrl as queueMonitorCtrl"
+      ng-init="queueMonitorCtrl.windowLoaded()"
+      resize>
+
+<div ng-include="'queueMonitor.tmpl.html'"></div>
+
+<script>
+    if (!Array.prototype.find) {
+        Array.prototype.find = function (predicate) {
+            if (this === null) {
+                throw new TypeError('Array.prototype.find called on null or undefined');
+            }
+            if (typeof predicate !== 'function') {
+                throw new TypeError('predicate must be a function');
+            }
+            var list = Object(this);
+            var length = list.length >>> 0;
+            var thisArg = arguments[1];
+            var value;
+
+            for (var i = 0; i < length; i++) {
+                value = list[i];
+                if (predicate.call(thisArg, value, i, list)) {
+                    return value;
+                }
+            }
+            return undefined;
+        };
+    }
+</script>
+
+<script src="../../../libs/misc.min.js"></script>
+
+<script>
+    var DebugInfoEnabled = false;
+</script>
+
+<script src="../../../libs/angular/angular.min.js"></script>
+
+<script src="../UCLocale.min.js"></script>
+<script src="../services/httpInterceptor.js"></script>
+
+<script src="../../../libs/grid/ui-grid.min.js"></script>
+<script src="../../../libs/ng-modules.min.js"></script>
+
+<script src="../../../libs/angular-ui.min.js"></script>
+
+<script src="../../../libs/angular/angular.min.js"></script>
+
+<script src="queueMonitor.controller.js"></script>
+
+</body>
+</html>

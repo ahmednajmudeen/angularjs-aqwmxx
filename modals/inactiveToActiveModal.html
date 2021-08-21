@@ -1,0 +1,69 @@
+<style>
+    .modal-dialog {
+        overflow-y: initial !important;
+    }
+
+    .modal-body {
+        overflow-y: auto;
+        background-color: #f3f3f3;
+    }
+</style>
+<div class="modal-header">
+    <h5 class="modal-title">
+        <div class="row">
+            <div class="col-xs-10">
+                <span>{{::getLocalPhrase('PresenceLoginWarning.Title')}}</span>
+            </div>
+        </div>
+    </h5>
+</div>
+<div class="modal-body" ng-style="{'min-height': vm.modalHeight + 'px'}">
+    <p ng-bind-html="::getLocalPhrase('PresenceLoginWarning.CurrentStatus', [ vm.currentStatusHTML ])"></p>
+
+    <div class="radio">
+        <label>
+            <input type="radio" ng-model="vm.presenceUpdateOptions" value="CHANGE_PRESENCE"/>
+
+            <div class="btn-group" uib-dropdown is-open="vm.isopen">
+                <span>
+                    {{::getLocalPhrase('PresenceLoginWarning.SetPresence')}}
+                    <a ng-href="" uib-dropdown-toggle ng-disabled="vm.presenceUpdateOptions !== 'CHANGE_PRESENCE'">
+                        <span ng-class="vm.currentSetting.color">
+                            <i ng-class="vm.currentSetting.icon"></i>{{vm.currentSetting.label}}
+                        </span>
+                        <i class="fas fa-chevron-down" style="margin-left:0.5em"></i>
+                    </a>
+                </span>
+                <ul class="dropdown-menu dropdown-menu-right" uib-dropdown-menu role="menu"
+                    aria-labelledby="single-button">
+                    <li><span>Profiles</span></li>
+                    <li ng-repeat="option in vm.presenceProfiles" role="menuitem">
+                        <a ng-href="" ng-click="vm.selectOption(option)"><span
+                            ng-class="option.color">{{option.label}}</span></a>
+                    </li>
+                    <li class="divider"></li>
+                    <li><span>Presence</span></li>
+                    <li ng-repeat="option in vm.presenceOptions" role="menuitem">
+                        <a ng-href="" ng-click="vm.selectOption(option)"><span ng-class="option.color"><i
+                            ng-class="option.icon"></i>{{option.label}}</span></a>
+                    </li>
+                </ul>
+            </div>
+        </label>
+    </div>
+    <div class="radio">
+        <label>
+            <input type="radio" ng-model="vm.presenceUpdateOptions" value="DO_NOTHING"/>
+            {{::getLocalPhrase('PresenceLoginWarning.DoNotUpdate')}}<br/>
+        </label>
+    </div>
+
+
+</div>
+<div class="modal-footer">
+
+
+    <div class="pull-right">
+        <button ng-click="vm.saveDialog()" class="btn btn-primary">{{::getLocalPhrase('Button.Continue')}}</button>
+    </div>
+</div>

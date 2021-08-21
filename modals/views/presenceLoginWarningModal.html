@@ -1,0 +1,78 @@
+<style>
+    .modal-dialog {
+        overflow-y: initial !important;
+    }
+
+    .modal-body {
+        overflow-y: auto;
+        background-color: #f3f3f3;
+    }
+</style>
+<div class="modal-header">
+    <h5 class="modal-title">
+        <div class="row">
+            <div class="col-xs-10">
+                <span>{{::getLocalPhrase('PresenceLoginWarning.Title')}}</span>
+            </div>
+        </div>
+    </h5>
+</div>
+<div class="modal-body" ng-style="{'min-height': modalHeight + 'px'}">
+    <p ng-bind-html="::getLocalPhrase('PresenceLoginWarning.CurrentStatus', [ data.currentStatusHTML ])"></p>
+
+    <div class="radio">
+        <label>
+            <input type="radio" ng-model="data.presenceUpdateOptions" value="SET_IN_THE_OFFICE"/>
+
+            <p ng-bind-html="::getLocalPhrase('PresenceLoginWarning.InOfficeStatus', [ data.inTheOfficeStatusHTML ])"></p>
+        </label>
+    </div>
+    <div class="radio" ng-if="data.presenceProfiles.length">
+        <label>
+            <input type="radio" ng-model="data.presenceUpdateOptions" value="PRESENCE_PROFILE"/>
+
+            {{::getLocalPhrase('PresenceLoginWarning.UsePresenceProfile')}}
+
+        </label>
+
+        <div uib-dropdown style="margin-left: 2em" is-open="data.open.dropdown" >
+            <a href uib-dropdown-toggle ng-disabled="data.presenceUpdateOptions !== 'PRESENCE_PROFILE'">
+                <span ng-if="!data.profileObj.name">{{::getLocalPhrase('PresenceLoginWarning.ChoosePresenceProfile')}}</span><span ng-if="data.profileObj.name">{{data.profileObj.name}}</span> <b class="caret"></b>
+            </a>
+            <ul uib-dropdown-menu role="menu" style="overflow: auto">
+                <li ng-repeat="profileObj in data.presenceProfiles track by $index"
+                    ng-click="setPresenceProfile(profileObj); data.open.dropdown1=false;">
+                    <a ng-href="">{{profileObj.name}}</a>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+    <div class="radio">
+        <label>
+            <input type="radio" ng-model="data.presenceUpdateOptions" value="PRESENCE_DETAILS"/>
+            {{::getLocalPhrase('PresenceLoginWarning.ViewEdit')}}
+        </label>
+    </div>
+    <div class="radio">
+        <label>
+            <input type="radio" ng-model="data.presenceUpdateOptions" value="DO_NOTHING"/>
+            {{::getLocalPhrase('PresenceLoginWarning.DoNotUpdate')}}<br/>
+        </label>
+    </div>
+
+</div>
+<div class="modal-footer">
+    <p class="pull-left">
+        <a href ng-click="data.doNotShowAgainToday = !data.doNotShowAgainToday">
+            <i class="fa fa-lg text-primary"
+               ng-class="{'fa fa-check-square': data.doNotShowAgainToday, 'fa fa-square-o': !data.doNotShowAgainToday}"></i>
+            {{::getLocalPhrase('PresenceLoginWarning.DoNotShow')}}
+        </a>
+
+    </p>
+
+    <div class="pull-right">
+        <button ng-click="saveDialog()" class="btn btn-primary" ng-disabled="data.presenceUpdateOptions==='PRESENCE_PROFILE' && data.profileObj.name===''">{{::getLocalPhrase('Button.Continue')}}</button>
+    </div>
+</div>

@@ -1,0 +1,42 @@
+<style>
+    .modal-dialog {
+        overflow-y: initial !important;
+    }
+
+    .modal-body {
+        overflow-y: auto;
+    }
+</style>
+<div class="modal-body" ng-style="{height: vm.modalHeight + 'px'}">
+
+    <div>
+        <div class="pull-left">
+            <img class="img-responsive img-rounded"
+                 ng-class="userObj.cache.photoClass"
+                 ng-src="{{ userObj.photo }}"
+                 alt="" style="max-width: 48px;"/>
+        </div>
+        <div class="pull-left" style="padding-left: 1em">
+            <div>
+                <i ng-if="userObj.cache.isMobile" class="fa fa-mobile-phone"></i>
+                <span class="pointer" ng-class="userObj.cache.presenceColor">
+                    <i ng-class="userObj.cache.presenceIcon"></i>
+                </span>
+                <span ng-class="userObj.cache.presenceColor">{{::userObj.name}} ({{userObj.extension}})</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="clearfix"></div>
+    <br/>
+
+    <rp-blf-communicate></rp-blf-communicate>
+
+    <div class="clearfix"></div>
+    <span ng-if="::userObj.cache.blfNote" class="blf-note"
+          ng-class="{'inactive-text': userObj.cache.isInactive}">{{userObj.cache.blfNote}}</span>
+    <span ng-if="::userObj.cache.lastActivityBlf"
+          class="small inactive-text">{{userObj.cache.lastActivityBlf}}</span>
+
+
+</div>

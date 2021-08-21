@@ -1,0 +1,37 @@
+<style>
+    .modal-dialog {
+        overflow-y: initial !important;
+    }
+
+    .modal-body {
+        overflow-y: auto;
+        background-color: #f3f3f3;
+    }
+</style>
+<div class="modal-header">
+    <h5 class="modal-title">
+        <span>Test Call Driver</span>
+    </h5>
+</div>
+<div class="modal-body">
+    <div class="container-fluid">
+        <div>
+            Extension: {{::vm.data.extension}}
+            <p>{{vm.data.status}}</p>
+        </div>
+        <button ng-click="vm.onStart()" class="btn btn-success" ng-if="!globalVars.TestDriverRunning">
+            Start
+        </button>
+        <button ng-click="vm.onStop()" class="btn btn-danger" ng-if="globalVars.TestDriverRunning">
+            Stop
+        </button>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="pull-right">
+
+        <button ng-click="vm.onClose()" class="btn btn-primary">
+            Close
+        </button>
+    </div>
+</div>

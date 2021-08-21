@@ -1,0 +1,74 @@
+<div class="modal-header">
+    <div class="row">
+        <div class="col-xs-10">
+            <h5 class="modal-title text-danger">
+                <span class="glyphicon glyphicon-phone-alt animated flash ringing"></span>
+                <ng-pluralize count="incomingCallsArr.length"
+                              when="{'0': getLocalPhrase('IncomingCall.Title0'),
+                                  '1' : getLocalPhrase('IncomingCall.Title0'),
+                                  'other' : getLocalPhrase('IncomingCall.Title0', [incomingCallsArr.length])}">
+                </ng-pluralize>
+            </h5>
+        </div>
+        <div class="col-xs-2 text-right">
+            <a href="" ng-click="ignoreAll()"><span style="color:black" class="fa fa-times text-regular"></span></a>
+        </div>
+    </div>
+
+
+</div>
+<div class="modal-body">
+    <div class="panel-body">
+        <div ng-repeat="ic in incomingCallsArr">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="text-center">
+                        <span class="glyphicon glyphicon-phone-alt animated flash ringing"></span> <span
+                            style="font-weight: 500; ">{{ic.name}}</span>
+                    </div>
+                    <div ng-switch on="ic.isContact">
+                        <div ng-switch-when="true" class="text-center">
+                            <h4><i>{{ic.phoneType}}</i></h4>
+
+                            <div class="row">
+                                <div class="col-xs-offset-3 col-xs-6 text-center">
+                                    <img ng-src="{{ic.imageURL}}" class="img-rounded">
+                                </div>
+                            </div>
+                        </div>
+                        <div ng-switch-default class="text-center">
+                            <h4>{{ic.number}}</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12" style="padding-top: 10px">
+                    <div class="btn-group btn-group-justified">
+
+                        <div class="btn-group" role="group" ng-if="::!globalVars.IsSLTPhone">
+                            <button ng-click="answer(ic, $index)" class="btn btn-success">
+                                <span class="fa fa-phone"></span> {{::getLocalPhrase('ActiveCall.Answer')}}
+                            </button>
+                        </div>
+                        <div ng-if="ic.canRedirect && !globalVars.IsSLTPhone" class="btn-group" role="group">
+                            <button ng-click="redirectToVM(ic, $index)" class="btn btn-default">
+                                <span class="fa fa-mail-forward"></span> {{::getLocalPhrase('Voicemail')}}
+                            </button>
+                        </div>
+                        <div class="btn-group" role="group" ng-if="::!globalVars.IsSLTPhone">
+                            <button ng-click="ignore(ic, $index)" class="btn btn-default">
+                                <span class="fa fa-angle-double-down"></span> {{::getLocalPhrase('ActiveCall.Ignore')}}
+                            </button>
+                        </div>
+                        <div class="btn-group" role="group" ng-if="::globalVars.IsSLTPhone">
+                            <button ng-click="ignore(ic, $index)" class="btn btn-default">
+                                {{::getLocalPhrase('Button.Close')}}
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <hr ng-if="incomingCallsArr.length>1"/>
+        </div>
+    </div>
+</div>

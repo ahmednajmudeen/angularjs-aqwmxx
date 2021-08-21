@@ -1,0 +1,53 @@
+<style>
+    .modal-dialog {
+        overflow-y: initial !important;
+    }
+
+    .modal-body {
+        overflow-y: auto;
+        background-color: #f3f3f3;
+    }
+
+    hr {
+        margin-top: 5px;
+        margin-bottom: 10px;
+    }
+
+    .row {
+        margin-bottom: 1em;
+    }
+</style>
+<div class="modal-header">
+    <h5 class="modal-title">
+        <div class="row">
+            <div class="col-xs-10">
+                <span>{{::vm.model.pageTitle}}</span>
+            </div>
+            <div class="col-xs-2 text-right">
+                <a href="" ng-click="vm.closeDialog()">
+                    <span style="color:black" class="fa fa-times text-regular"></span></a>
+            </div>
+
+        </div>
+    </h5>
+</div>
+<div class="modal-body">
+    <label class="control-label ">
+        {{::getLocalPhrase('ChooseContactTypes')}}
+    </label>
+    <div class="radio-group">
+        <div class="checkbox" ng-repeat="contactType in vm.model.types" ng-if="contactType.offer">
+            <label>
+                <input type="checkbox" ng-model="contactType.value">
+                <img ng-if="contactType.imgSrc" ng-src="{{contactType.imgSrc}}" style="width: 1em"/>
+                <i ng-if="contactType.faClass" ng-class="contactType.faClass"/>
+                {{::contactType.label}}
+            </label>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="pull-right">
+        <button ng-click="vm.saveDialog()" class="btn btn-default">{{::getLocalPhrase('Update')}}</button>
+    </div>
+</div>
